@@ -1,0 +1,34 @@
+---
+import type { TargetContent } from "../../src";
+import FeelbackLoader from "./FeelbackLoader.astro";
+
+type Props = TargetContent & {
+  revokable?: boolean;
+  showCount?: boolean;
+  textQuestion?: string;
+};
+
+const { revokable, showCount, textQuestion, ...target } = Astro.props;
+
+const config = {
+  revokable,
+  showCount,
+  ...("contentSetId" in target
+    ? {
+        contentSetId: target.contentSetId,
+        key: target.key,
+      }
+    : {
+        contentId: target.contentId,
+      }),
+};
+---
+
+<FeelbackLoader />
+
+<div class="feelback-container" data-feelback={JSON.stringify(config)}>
+  <div class="feelback-q">
+    {textQuestion && <span class="feelback-text">{textQuestion}</span>}
+    <slot />
+  </div>
+</div>

@@ -1,0 +1,31 @@
+---
+import type { TargetContent } from "../src";
+import ButtonValueList from "./parts/ButtonValueList.astro";
+import type { ButtonItem } from "./parts/ButtonValueList.astro";
+import SwitchContainer from "./parts/SwitchContainer.astro";
+
+type PresetName = "like-dislike" | "check" | "arrows";
+
+type Props = TargetContent & {
+  preset?: PresetName | readonly ButtonItem[];
+  showCount?: boolean;
+  showTitle?: boolean;
+  revokable?: boolean;
+  textQuestion?: string;
+  textAnswer?: string;
+};
+
+const {
+  revokable,
+  textQuestion = "Is this page useful?",
+  textAnswer = "Thanks for your feedback",
+  showCount,
+  showTitle,
+  preset: items = "like-dislike",
+  ...target
+} = Astro.props;
+---
+
+<SwitchContainer {...{...target, revokable, showCount, textQuestion, textAnswer}}>
+  <ButtonValueList {...{items, showTitle, showCount}} />
+</SwitchContainer>

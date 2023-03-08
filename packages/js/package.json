@@ -1,0 +1,66 @@
+{
+    "name": "@feelback/js",
+    "version": "0.1.0",
+    "description": "Client side js integration for Feelback service",
+    "type": "module",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs",
+            "browser": {
+                "types": "./dist/browser.d.ts",
+                "default": "./dist/browser.js"
+            }
+        },
+        "./browser": {
+            "types": "./dist/browser.d.ts",
+            "default": "./dist/browser.js"
+        },
+        "./auto": {
+            "types": "./dist/browser-auto.d.ts",
+            "import": "./dist/browser-auto.js",
+            "browser": "./dist/browser-auto.js"
+        },
+        "./styles/*": "./styles/*",
+        "./icons/*": "./icons/*"
+    },
+    "scripts": {
+        "dev": "ts-node --esm -T tasks/dev.ts",
+        "build": "ts-node --esm -T tasks/build.ts"
+    },
+    "keywords": [
+        "feelback",
+        "feedback"
+    ],
+    "author": {
+        "name": "Giuseppe La Torre",
+        "url": "https://github.com/giuseppelt"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/giuseppelt/feelback-integrations#readme.md",
+    "bugs": "https://github.com/giuseppelt/feelback-integrations/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/giuseppelt/feelback-integrations.git"
+    },
+    "files": [
+        "dist",
+        "icons",
+        "styles",
+        "package.json",
+        "*.d.ts",
+        "README.md",
+        "CHANGELOG.md"
+    ],
+    "devDependencies": {
+        "@types/node": "^16.18.25",
+        "dotenv": "^16.0.3",
+        "esbuild": "^0.17.18",
+        "esbuild-sass-plugin": "^2.9.0",
+        "sass": "^1.62.1",
+        "ts-node": "^10.9.1",
+        "typescript": "5.0.4"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "files": [],
+    "references": [
+        {
+            "path": "./packages/react/tsconfig.dev.json"
+        }
+    ]
+}

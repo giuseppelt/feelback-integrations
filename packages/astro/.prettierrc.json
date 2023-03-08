@@ -1,0 +1,13 @@
+{
+    "overrides": [
+        {
+            "files": "*.astro",
+            "options": {
+                "proseWrap": "preserve",
+                "singleQuote": false,
+                "printWidth": 120,
+                "arrowParens": "avoid"
+            }
+        }
+    ]
+}

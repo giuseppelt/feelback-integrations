@@ -1,0 +1,15 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "lib": [
+            "ESNext"
+        ],
+        "noEmit": true,
+        "emitDeclarationOnly": false,
+        "moduleResolution": "nodenext"
+    },
+    "include": [
+        "*.ts",
+        "copyAssets.js"
+    ]
+}

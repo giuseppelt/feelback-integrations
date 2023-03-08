@@ -1,0 +1,23 @@
+---
+import type { TargetContent } from "../src";
+import ButtonValueList from "./parts/ButtonValueList.astro";
+import type { PresetName as ButtonsPresetName } from "./parts/ButtonValueList.astro";
+import Container from "./parts/Container.astro";
+
+type PresetName = "heart" | "star" | "like";
+
+type Props = TargetContent & {
+  preset?: PresetName | readonly [html: string | readonly [string, string], title: string | undefined];
+  showCount?: boolean;
+  showTitle?: boolean;
+  revokable?: boolean;
+};
+
+const { revokable, showCount, showTitle, preset = "heart", ...target } = Astro.props;
+
+const items = typeof preset === "string" ? (`pulse-${preset}` as ButtonsPresetName) : ([["+", ...preset]] as const);
+---
+
+<Container {...{...target, revokable, showCount}}>
+  <ButtonValueList {...{items, showTitle, showCount}} />
+</Container>

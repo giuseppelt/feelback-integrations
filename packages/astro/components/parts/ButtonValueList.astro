@@ -1,0 +1,92 @@
+---
+import iconHappy from "@feelback/js/icons/icon-happy.svg?raw";
+import iconNeutral from "@feelback/js/icons/icon-neutral.svg?raw";
+import iconSad from "@feelback/js/icons/icon-sad.svg?raw";
+import iconHeart from "@feelback/js/icons/icon-heart.svg?raw";
+import iconHeartActive from "@feelback/js/icons/icon-heart-active.svg?raw";
+import iconStar from "@feelback/js/icons/icon-star.svg?raw";
+import iconStarActive from "@feelback/js/icons/icon-star-active.svg?raw";
+import iconLike from "@feelback/js/icons/icon-like.svg?raw";
+import iconLikeActive from "@feelback/js/icons/icon-like-active.svg?raw";
+import iconDislike from "@feelback/js/icons/icon-dislike.svg?raw";
+import iconCheck from "@feelback/js/icons/icon-check.svg?raw";
+import iconTimes from "@feelback/js/icons/icon-times.svg?raw";
+import iconArrowUp from "@feelback/js/icons/icon-arrow-up.svg?raw";
+import iconArrowDown from "@feelback/js/icons/icon-arrow-down.svg?raw";
+
+const PRESETS = {
+  "pulse-heart": [["+", [iconHeart, iconHeartActive], "Love"]],
+  "pulse-star": [["+", [iconStar, iconStarActive], "Star"]],
+  "pulse-like": [["+", [iconLike, iconLikeActive], "Like"]],
+  "like-dislike": [
+    ["y", iconLike, "Like"],
+    ["n", iconDislike, "Dislike"],
+  ],
+  check: [
+    ["y", iconCheck, "Yes"],
+    ["n", iconTimes, "No"],
+  ],
+  arrows: [
+    ["y", iconArrowUp, "Upvote"],
+    ["n", iconArrowDown, "Downvote"],
+  ],
+  sentiment: [
+    ["happy", iconHappy, "Happy"],
+    ["neutral", iconNeutral, "Neutral"],
+    ["sad", iconSad, "Sad"],
+  ],
+  github: [
+    ["+1", "👍", "Like"],
+    ["-1", "👎", "Dislike"],
+    ["laugh", "😄", "Laugh"],
+    ["confused", "😕", "Confused"],
+    ["heart", "❤️", "Love"],
+    ["hooray", "🎉", "Hooray!"],
+    ["rocket", "🚀", "Let's go!"],
+    ["eyes", "👀", "What?"],
+  ],
+  facebook: [
+    ["like", "👍", "Like"],
+    ["love", "❤️", "Love"],
+    ["laugh", "😄", "AhAh"],
+    ["wow", "😮", "Wow"],
+    ["sad", "😥", "Cry"],
+    ["angry", "😡", "Angry"],
+  ],
+} satisfies Record<string, ButtonItem[]>;
+
+export type PresetName = keyof typeof PRESETS;
+export type ButtonItem = readonly [value: string, icon: string | readonly [string, string], title: string | undefined];
+
+interface Props {
+  hideZero?: boolean;
+  showTitle?: boolean;
+  showCount?: boolean;
+  items: PresetName | readonly ButtonItem[];
+}
+
+const { showTitle = true, showCount = false, hideZero = false, items: _items } = Astro.props;
+
+const items = typeof _items === "string" ? PRESETS[_items] : _items;
+if (items.length < 1) {
+  throw new Error("No feelback button values specified");
+}
+---
+
+<div class={`feelback-buttons${showCount ? " with-count" : ""}${hideZero ? " hide-zero" : ""}`}>
+  {
+    items.map(([value, html, title], buttonIdx) => (
+      <button title={showTitle ? title : undefined} class="feelback-btn" data-feelback-value={value}>
+        {!Array.isArray(html) ? (
+          <span class="feelback-icon" set:html={html} />
+        ) : (
+          <>
+            <span class="feelback-icon inactive" set:html={html[0]} />
+            <span class="feelback-icon active" set:html={html[1]} />
+          </>
+        )}
+        {showCount && <span class="feelback-count" data-feelback-count={value} data-feelback-count-index={buttonIdx} />}
+      </button>
+    ))
+  }
+</div>

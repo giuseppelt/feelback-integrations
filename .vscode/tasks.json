@@ -1,0 +1,61 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "tsc watch",
+            "type": "npm",
+            "script": "watch:ts",
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": "$tsc-watch",
+            "presentation": {
+                "reveal": "never"
+            },
+            "runOptions": {
+                "runOn": "default"
+            }
+        },
+        {
+            "label": "js dev",
+            "type": "npm",
+            "script": "dev",
+            "group": "build",
+            "path": "${workspaceFolder}/packages/js",
+            "options": {
+                "cwd": "${workspaceFolder}/packages/js"
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
+            "label": "react dev",
+            "type": "npm",
+            "script": "dev",
+            "group": "build",
+            "path": "${workspaceFolder}/packages/react",
+            "options": {
+                "cwd": "${workspaceFolder}/packages/react"
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
+            "label": "example astro-docs",
+            "type": "npm",
+            "script": "dev",
+            "group": "build",
+            "path": "${workspaceFolder}/samples/astro-docs",
+            "options": {
+                "cwd": "${workspaceFolder}/samples/astro-docs"
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            }
+        }
+    ]
+}

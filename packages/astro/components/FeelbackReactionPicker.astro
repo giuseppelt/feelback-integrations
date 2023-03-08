@@ -1,0 +1,28 @@
+---
+import type { TargetContent } from "../src";
+import type { ButtonItem } from "./parts/ButtonValueList.astro";
+import ButtonValueList from "./parts/ButtonValueList.astro";
+import Container from "./parts/Container.astro";
+import iconHappy from "@feelback/js/icons/icon-happy.svg?raw";
+
+type PresetName = "sentiment" | "github" | "facebook";
+
+type Props = TargetContent & {
+  preset: PresetName | readonly ButtonItem[];
+  showCount?: boolean;
+  showTitle?: boolean;
+  revokable?: boolean;
+};
+
+const { revokable, showCount = true, showTitle, preset: items, ...target } = Astro.props;
+---
+
+<Container {...{...target,revokable,showCount}}>
+  <button class="feelback-btn btn-picker">
+    <span class="feelback-icon" set:html={iconHappy} />
+  </button>
+  <div class="picker">
+    <ButtonValueList {...{items, showTitle}} />
+  </div>
+  <ButtonValueList {...{items, showTitle,showCount}} hideZero />
+</Container>

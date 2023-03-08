@@ -1,0 +1,3 @@
+# exclude from git as they are a hard link to the source package @feelback/js
+styles/
+icons/

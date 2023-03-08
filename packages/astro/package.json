@@ -1,0 +1,52 @@
+{
+    "name": "astro-feelback",
+    "version": "0.1.0",
+    "description": "Use Feelback service within your Astro website",
+    "type": "module",
+    "exports": {
+        ".": "./dist/index.js",
+        "./client": "./dist/client.js",
+        "./components/*": "./components/*",
+        "./icons/*": "./icons/*",
+        "./styles/*": "./styles/*"
+    },
+    "scripts": {
+        "prepublishOnly": "node ./tasks/copyAssets.js",
+        "build": "tsc"
+    },
+    "keywords": [
+        "astro",
+        "astro-integration",
+        "astro-component",
+        "feelback"
+    ],
+    "author": {
+        "name": "Giuseppe La Torre",
+        "url": "https://github.com/giuseppelt"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/giuseppelt/feelback-integrations/packages/astro#readme.md",
+    "bugs": "https://github.com/giuseppelt/feelback-integrations/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/giuseppelt/feelback-integrations.git"
+    },
+    "files": [
+        "dist",
+        "components",
+        "styles",
+        "icons",
+        "*.d.ts",
+        "package.json",
+        "README.md",
+        "CHANGELOG.md"
+    ],
+    "dependencies": {
+        "@feelback/js": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "^16.18.25",
+        "astro": "^2.3.1",
+        "typescript": "5.0.4"
+    }
+}

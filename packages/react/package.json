@@ -1,0 +1,56 @@
+{
+    "name": "@feelback/react",
+    "version": "0.1.0",
+    "type": "module",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/feelback-react.esm.js",
+            "require": "./dist/feelback-react.cjs.js"
+        },
+        "./styles/*": "./styles/*"
+    },
+    "sideEffects": false,
+    "scripts": {
+        "dev": "ts-node --esm -T tasks/dev.ts",
+        "build": "ts-node --esm -T tasks/build.ts",
+        "prepublishOnly": "node ./tasks/copyAssets.js"
+    },
+    "author": {
+        "name": "Giuseppe La Torre",
+        "url": "https://github.com/giuseppelt"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/giuseppelt/feelback-integrations#readme.md",
+    "bugs": "https://github.com/giuseppelt/feelback-integrations/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/giuseppelt/feelback-integrations.git"
+    },
+    "files": [
+        "dist",
+        "styles",
+        "CHANGELOG.md",
+        "README.md",
+        "*.d.ts"
+    ],
+    "engines": {
+        "node": ">=14"
+    },
+    "dependencies": {
+        "@feelback/js": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "^18.16.1",
+        "@types/react": "^18.2.0",
+        "esbuild": "^0.17.18",
+        "esbuild-plugin-svgr": "^1.1.0",
+        "react": "^18.2.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.0.4"
+    },
+    "peerDependencies": {
+        "react": ">=17"
+    }
+}

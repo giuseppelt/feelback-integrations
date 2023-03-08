@@ -1,0 +1,17 @@
+{
+  "name": "feelback-integrations",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "pnpm run -r build",
+    "prerelease": "ts-node -T scripts/prerelease",
+    "publish": "pnpm publish -r --access public",
+    "publish:pre": "pnpm publish -r --access public --tag pre",
+    "watch:ts": "tsc --build tsconfig.dev.json --watch --incremental --force"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
