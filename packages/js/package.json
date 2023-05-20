@@ -1,6 +1,6 @@
 {
     "name": "@feelback/js",
-    "version": "0.1.0",
+    "version": "0.1.1-pre",
     "description": "Client side js integration for Feelback service",
     "type": "module",
     "types": "./dist/index.d.ts",

@@ -1,6 +1,6 @@
 {
     "name": "@feelback/react",
-    "version": "0.1.0",
+    "version": "0.1.1-pre",
     "type": "module",
     "types": "./dist/index.d.ts",
     "exports": {
