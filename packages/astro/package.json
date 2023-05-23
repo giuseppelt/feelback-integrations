@@ -18,7 +18,11 @@
         "astro",
         "astro-integration",
         "astro-component",
-        "feelback"
+        "analytics",
+        "ui",
+        "feedback",
+        "feelback",
+        "emoji"
     ],
     "author": {
         "name": "Giuseppe La Torre",
