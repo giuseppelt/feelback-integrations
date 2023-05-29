@@ -5,6 +5,20 @@ import { getFeelbackStore, FeelbackStoreType } from "./store";
 
 export * from "./index";
 
+
+function warn(message: string, ...args: any) {
+    console.warn(`[Feelback] ${message}`, ...args);
+}
+
+function error(message: string | Error, error?: Error) {
+    if (message instanceof Error) {
+        error = message;
+        message = error?.message;
+    }
+    console.error(`[Feelback] ${message}`, error);
+}
+
+
 export type FeelbackConfig = {
     store?: FeelbackStoreType
     endpoint?: string
@@ -17,35 +31,56 @@ export function setupFeelback(config?: FeelbackConfig) {
     const store = getFeelbackStore(config?.store);
 
     const containers = new Set([
-        ...document.querySelectorAll("[data-feelback]"),
-        ...document.querySelectorAll("[data-feelback-set]"),
-        ...document.querySelectorAll("[data-feelback-content]"),
+        ...qsa(document, "[data-feelback]"),
+        ...qsa(document, "[data-feelback-set]"),
+        ...qsa(document, "[data-feelback-content]"),
     ]);
 
     containers.forEach(container => {
-        const config = getConfigFromElement(container);
+        const config = getConfigFromElement(container)!;
         if (!config) return;
 
         const target: TargetContent = config.contentId
             ? { contentId: config.contentId }
             : { contentSetId: config.contentSetId!, key: config.key };
 
+        switch (config.component || "buttons") {
+            case "buttons": setupComponentSimpleButtons(container, target, config); break;
+            case "form": setupComponentForm(container, target, config); break;
+            default: return warn("Unknown component: %s", config.component);
+        }
+
+        // setup behaviors
+        qsa(container, "[data-behavior-action],[data-feelback-action]").forEach(button => {
+            const action = button.getAttribute("data-behavior-action") ||
+                button.getAttribute("data-feelback-action");
+            switch (action) {
+                case "switch": return BH.switch.setup(container, button);
+                case "popup": return BH.popup.setup(container, button);
+                case "dialog": return BH.dialog.setup(container, button);
+                case "set-field": return BH.setField.setup(container, button);
+            }
+        });
+    });
+
+
+
+    function setupComponentSimpleButtons(container: HTMLElement, target: TargetContent, params: FeelbackContainerConfig) {
         const currentValue = store.getValue(target);
         const isRevokable = store.isRevokable(target);
 
-        const buttons = [...container.querySelectorAll<HTMLElement>("[data-feelback-value]").values()]
+        const countsLabels = setupCountLabels(container, target, params);
+
+        const buttons = [...qsa(container, "[data-feelback-value]").values()]
             .map(x => [x.getAttribute("data-feelback-value")!, x] as const);
-        const countsLabels = !config.showCount ? [] :
-            [...container.querySelectorAll("[data-feelback-count]").values()]
-                .map(x => [x.getAttribute("data-feelback-count")!, x.getAttribute("data-feelback-count-index")!, x] as const);
 
         buttons.forEach(([value, button]) => {
-            if (isSameValue(currentValue, value)) {
-                activate(buttons, value);
+            if (isSameFeelbackValue(currentValue, value)) {
+                BUTTON_GROUP.activate(buttons, value);
             }
 
             if (currentValue !== undefined && !isRevokable) {
-                disable(button);
+                BUTTON_GROUP.disableItem(button);
                 return;
             }
 
@@ -54,59 +89,87 @@ export function setupFeelback(config?: FeelbackConfig) {
                 const revokable = store.getRevocable(target);
                 const currentValue = store.getValue(target);
 
-                if (isSameValue(currentValue, value)) {
+                if (isSameFeelbackValue(currentValue, value)) {
                     if (revokable) {
-                        removeFeelback({ endpoint, feelbackId: revokable.feelbackId })
-                            .then(() => {
-                                deactivate(buttons, value);
-                                deltaCounts(countsLabels, value, -1);
-                            })
-                            .catch(() => { });
+                        removeFeelback({ endpoint, feelbackId: revokable.feelbackId }).then(
+                            () => {
+                                BUTTON_GROUP.deactivate(buttons, value);
+                                COUNT_LABELS.delta(countsLabels, value, -1);
+                            },
+                            err => {
+                                error("Cannot remove feelback", err)
+                            }
+                        );
                     }
                 } else {
-                    sendFeelback({ endpoint, ...target, value })
-                        .then(() => {
-                            activate(buttons, value);
-                            performBehavior(container, config.behavior, store.isRevokable(target));
-                            deltaCounts(countsLabels, String(currentValue ?? "0"), -1);
-                            deltaCounts(countsLabels, value, 1);
-                        })
-                        .catch(() => { });
+                    sendFeelback({ endpoint, ...target, value }).then(
+                        () => {
+                            BUTTON_GROUP.activate(buttons, value);
+
+                            if (params.behavior === "switch") {
+                                BH.switch.run({ container, autoCancel: store.isRevokable(target) });
+                            }
+
+                            COUNT_LABELS.delta(countsLabels, String(currentValue ?? "0"), -1);
+                            COUNT_LABELS.delta(countsLabels, value, 1);
+                        },
+                        err => {
+                            error("Cannot send feelback", err);
+                        });
                 }
             });
         });
+    }
 
-        // setup pickers
+    function setupComponentForm(container: HTMLElement, target: TargetContent, params: FeelbackContainerConfig) {
+        const form = qs(container, ".feelback-form");
+        if (!form) return;
 
-        container.querySelector(".btn-picker")?.addEventListener("click", ev => {
-            const btn = ev.target as HTMLElement;
-            const picker = container.querySelector<HTMLElement>(".picker");
-            if (!picker) return;
-
-            picker.style.display = "block";
-            // some naive positioning
-            picker.style.top = (btn.offsetTop - picker.getBoundingClientRect().height - 4) + "px";
-            picker.style.left = btn.offsetLeft + "px";
+        form.addEventListener("submit", ev => {
+            ev.preventDefault();
             ev.stopPropagation();
 
-            document.addEventListener("click", () => {
-                picker.style.display = "none";
-            }, { once: true, capture: false });
-        });
+            const value = getFormValue(form);
+            if (!value) return;
 
-        if (config.showCount && countsLabels.length > 0) {
-            getFeelbackAggregates({ ...target, endpoint }).then(data => {
-                countsLabels.forEach(([, idx, label]) => {
-                    setSingleCount(label, data?.[Number(idx)]);
+            sendFeelback({ endpoint, ...target, value }).then(
+                () => {
+                    BH.switch.run({ container });
+                    if (params.behavior === "dialog") {
+                        BH.dialog.closeActive?.();
+                    }
+                },
+                err => {
+                    error("Cannot send feelback", err);
                 });
-            }).catch(() => { });
-        }
-    });
+        });
+    }
+
+
+    function setupCountLabels(container: HTMLElement, target: TargetContent, params: FeelbackContainerConfig) {
+        if (!params.showCount) return [];
+
+        const countsLabels = [...qsa(container, "[data-feelback-count]").values()]
+            .map(x => [x.getAttribute("data-feelback-count")!, x.getAttribute("data-feelback-count-index")!, x] as const);
+
+        if (countsLabels.length < 1) return [];
+
+        getFeelbackAggregates({ ...target, endpoint }).then(
+            data => {
+                countsLabels.forEach(([, idx, label]) => {
+                    COUNT_LABELS.setItem(label, data?.[Number(idx)]);
+                });
+            },
+            () => { });
+
+        return countsLabels;
+    }
 }
 
 
 
 export type FeelbackContainerConfig = {
+    component?: "buttons" | "form"
     contentSetId?: string
     key?: string
     contentId?: string
@@ -123,7 +186,7 @@ export function getConfigFromElement(el: Element): FeelbackContainerConfig | und
         try {
             return JSON.parse(config);
         } catch (err) {
-            console.warn("[Feelback] Invalid feelback config for element", el);
+            warn("Invalid config for element", el);
             return;
         }
     }
@@ -150,86 +213,273 @@ export function getConfigFromElement(el: Element): FeelbackContainerConfig | und
         try {
             return {
                 ...target,
+                component: el.getAttribute("data-feelback-component") as any,
                 revokable: el.getAttribute("data-feelback-revokable") !== "false",
                 behavior: el.getAttribute("data-feelback-behavior") || undefined,
             };
         } catch (err: any) {
-            console.warn(err.message);
+            warn("Invalid attributes for element", el);
             return;
         }
     }
 }
 
-function isSameValue(feelbackValue: any, buttonValue: any) {
-    if (feelbackValue === undefined || feelbackValue === null) return false;
-    if (feelbackValue === buttonValue) return true;
-    if (typeof feelbackValue === "object" && feelbackValue?.value === buttonValue) return true;
+function isSameFeelbackValue(valueA: any, valueB: any) {
+    if (valueA === undefined || valueA === null) return false;
+    if (valueA === valueB) return true;
+    if (typeof valueA === "object" && valueA?.value === valueB) return true;
 
     return false;
 }
 
-function activate(items: (readonly [string, Element])[], value: string) {
-    items.forEach(([v, el]) => {
-        if (v === value) {
-            el.classList.add("active");
-        } else {
-            el.classList.remove("active", "disabled");
+
+const COUNT_LABELS = {
+    delta(items: (readonly [string, string, Element])[], value: string, delta: number) {
+        const [, , label] = items.find(([v]) => v === value) || [];
+        if (!label) return;
+        COUNT_LABELS.set(items, value, Number(label.textContent) + delta);
+    },
+    set(items: (readonly [string, string, Element])[], value: string, count: number | undefined) {
+        items.forEach(([v, , label]) => {
+            if (v === value) {
+                COUNT_LABELS.setItem(label, count);
+            }
+        });
+    },
+    setItem(label: Element, value: number | undefined) {
+        label.textContent = (value || 0).toFixed().toString();
+        label.setAttribute("data-feelback-count-value", (value || 0).toString());
+    }
+};
+
+
+
+const BUTTON_GROUP = {
+    activate(items: (readonly [string, Element])[], value: string) {
+        items.forEach(([v, el]) => {
+            if (v === value) {
+                el.classList.add("active");
+            } else {
+                el.classList.remove("active", "disabled");
+            }
+        });
+    },
+
+    deactivate(items: (readonly [string, Element])[], value: string) {
+        items.forEach(([v, el]) => {
+            if (v === value) {
+                el.classList.remove("active", "disabled");
+            }
+        });
+    },
+
+    disableItem(el: Element) {
+        el.classList.add("disabled");
+    }
+};
+
+
+const BH = {
+    switch: {
+        setup(container: HTMLElement, source: HTMLElement) {
+            const sideA = source.hasAttribute("data-behavior-source")
+                ? getElement(source.getAttribute("data-behavior-source")!, source?.parentElement, container)
+                : source;
+
+            const target = getElement(source.getAttribute("data-behavior-target")!, source?.parentElement, container);
+            if (!target) return;
+
+            source.addEventListener("click", ev => {
+                BH.switch.run({ container, sideA, sideB: target });
+                stopEvent(ev);
+            });
+        },
+        run({ container, sideA, sideB, autoCancel }: {
+            container: HTMLElement
+            sideA?: string | HTMLElement
+            sideB?: string | HTMLElement
+            autoCancel?: boolean | number
+        }) {
+            const sa = getElement(sideA || "[data-behavior-switch-side='a']", container);
+            const sb = getElement(sideB || "[data-behavior-switch-side='b']", container);
+            if (!sa || !sb) return;
+
+            const sideA_display = sa.style.display;
+            sa.style.display = "none";
+            sb.style.display = "block";
+
+            if (autoCancel) {
+                setTimeout(() => {
+                    sb.style.display = "none";
+                    sa.style.display = sideA_display;
+                }, 5000);
+            }
         }
-    });
-}
+    },
+    popup: {
+        setup(container: HTMLElement, source: HTMLElement) {
+            const target = getElement(source.getAttribute("data-behavior-target") || ".popup", source?.parentElement, container);
+            if (!target) return;
 
-function deactivate(items: (readonly [string, Element])[], value: string) {
-    items.forEach(([v, el]) => {
-        if (v === value) {
-            el.classList.remove("active", "disabled");
+            source.addEventListener("click", ev => {
+                BH.popup.run({ source, target });
+                stopEvent(ev);
+            });
+        },
+        run({ source, target }: { source: HTMLElement, target: HTMLElement }) {
+            target.style.display = "block";
+            // some naive positioning
+            target.style.top = (source.offsetTop - (target.getBoundingClientRect().height - source.getBoundingClientRect().height) / 2) + "px";
+            target.style.left = source.offsetLeft + "px";
+
+            // hide on any click
+            document.addEventListener("click", () => {
+                target.style.display = "none";
+            }, { once: true, capture: false });
         }
-    });
-}
+    },
+    dialog: {
+        closeActive: undefined as Function | undefined,
+        setup(container: HTMLElement, source: HTMLElement) {
+            const target = getElement(source.getAttribute("data-behavior-target") || ".dialog", source?.parentElement, container);
+            if (!target) return;
 
-function disable(el: Element) {
-    el.classList.add("disabled");
-}
+            // detach and move to dom-end
+            target.remove();
+            const parent = document.createElement("div");
+            parent.classList.add("feelback-style");
+            parent.append(target);
+            document.body.append(parent);
 
-function performBehavior(container: Element, behavior?: string, revocable?: boolean) {
-    BEHAVIORS[behavior as keyof typeof BEHAVIORS]?.(container, revocable || false);
-}
+            source.addEventListener("click", ev => {
+                BH.dialog.run({ source, target });
+                stopEvent(ev);
+            });
+        },
+        run({ source, target }: { source: HTMLElement, target: HTMLElement }) {
+            // const bodyOverflow = document.body.style.overflow;
+            // document.body.style.overflow = "hidden";
+            target.style.display = "block";
 
-function deltaCounts(items: (readonly [string, string, Element])[], value: string, delta: number) {
-    const [, , label] = items.find(([v]) => v === value) || [];
-    if (!label) return;
-    setCounts(items, value, Number(label.textContent) + delta);
-}
-function setCounts(items: (readonly [string, string, Element])[], value: string, count: number | undefined) {
-    items.forEach(([v, , label]) => {
-        if (v === value) {
-            setSingleCount(label, count);
+            const cancelButtons = [...qsa(target, "[data-behavior-action='cancel']")]
+            cancelButtons.forEach(x => {
+                x.addEventListener("click", stopEventAndCloseDialog);
+            });
+
+
+            const content = qs(target, ".content");
+            // hide on any click
+            const onClickOutside = (ev: Event) => {
+                if (content?.contains(ev.target as any)) {
+                    return;
+                }
+
+                stopEventAndCloseDialog(ev);
+            };
+
+            document.addEventListener("click", onClickOutside, { capture: true });
+
+            BH.dialog.closeActive = closeDialog;
+
+            function stopEventAndCloseDialog(ev: Event) {
+                stopEvent(ev);
+                closeDialog();
+            }
+
+            function closeDialog() {
+                target.style.display = "none";
+                // document.body.style.overflow = bodyOverflow;
+                document.removeEventListener("click", onClickOutside, { capture: true });
+                cancelButtons.forEach(x => x.removeEventListener("click", stopEventAndCloseDialog));
+            }
         }
-    });
-}
+    },
+    setField: {
+        setup(container: HTMLElement, source: HTMLElement) {
+            const group = source.closest("[data-feelback-type='button-group']");
+            if (!group) return;
 
-function setSingleCount(label: Element, value: number | undefined) {
-    label.textContent = (value || 0).toFixed().toString();
-    label.setAttribute("data-feelback-count-value", (value || 0).toString());
-}
+            const field = qs<HTMLInputElement>(group, "[data-feelback-field]");
+            const buttons = [...qsa(group, ":scope>button")]
+                .map(x => [x.getAttribute("data-feelback-value")!, x] as const);
 
+            const value = source.getAttribute("data-feelback-value")!;
+            source.addEventListener("click", ev => {
+                BUTTON_GROUP.activate(buttons, value);
+                if (field) {
+                    field.value = value;
+                }
 
-const BEHAVIORS = {
-    "switch": (container, revokable) => {
-        const containerQ = container.querySelector<HTMLElement>(".feelback-q");
-        const containerA = container.querySelector<HTMLElement>(".feelback-a");
-        if (!containerQ || !containerA) {
-            return;
-        }
-
-        const containerQDisplay = containerQ.style.display;
-        containerQ.style.display = "none";
-        containerA.style.display = "block";
-
-        if (revokable) {
-            setTimeout(() => {
-                containerA.style.display = "none";
-                containerQ.style.display = containerQDisplay;
-            }, 5000);
+                stopEvent(ev);
+            });
         }
     }
-} as Record<string, (container: Element, revocable: boolean) => void>
+}
+
+
+function qs<T extends Element = HTMLElement>(el: ParentNode, selector: string) {
+    return el.querySelector<T>(selector) || undefined;
+}
+
+function qsa<T extends Element = HTMLElement>(el: ParentNode, selector: string) {
+    return el.querySelectorAll<T>(selector);
+}
+
+function stopEvent(ev: Event) {
+    ev.preventDefault();
+    ev.stopPropagation();
+}
+
+
+function getElement(el: string | HTMLElement, ...containers: (HTMLElement | undefined | null)[]): HTMLElement | undefined {
+    if (typeof el !== "string") return el || undefined;
+
+    for (const container of containers) {
+        if (container) {
+            const child = qs(container, el);
+            if (child) {
+                return child;
+            }
+        }
+    }
+}
+
+
+function getFormValue(form: HTMLElement): any {
+    const type = form.getAttribute("data-feelback-type");
+    if (type === "form-single") {
+        const field = qs(form, "[data-feelback-field]");
+        return field && getFieldValue(field);
+    }
+
+    const fields = [...qsa(form, "[data-feelback-field]")];
+    const value = fields.reduce((r, f) => {
+        const name = f.getAttribute("data-feelback-field") || (f as any).name;
+        if (name) {
+            r[name] = getFieldValue(f);
+        }
+        return r;
+    }, {} as any);
+
+    if (Object.keys(value).length === 0) {
+        return;
+    }
+
+    return value;
+}
+
+function getFieldValue(el: HTMLElement) {
+    if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+        return (el as HTMLInputElement).value;
+    }
+
+    const type = el.getAttribute("data-feelback-type");
+    if (type === "button-group") {
+        return qs(el, "button.active")?.getAttribute("data-feelback-value");
+    }
+
+    const value = el.getAttribute("data-feelback-value");
+    if (value) {
+        return value;
+    }
+}

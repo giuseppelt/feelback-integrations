@@ -36,16 +36,14 @@ export function FeelbackPulse(props: FeelbackPulseProps) {
   }
 
   return (
-    <div className="feelback-container">
-      <div className="feelback-q">
-        <ButtonValueList
-          items={preset!}
-          showCount={showCount}
-          counts={counts}
-          isDisabled={localValue !== undefined && !isRevokable}
-          active={localValue}
-          onClick={onClick} />
-      </div>
+    <div className="feelback-container feelback-pulse">
+      <ButtonValueList
+        items={preset}
+        showCount={showCount}
+        counts={counts}
+        isDisabled={localValue !== undefined && !isRevokable}
+        active={localValue}
+        onClick={onClick} />
     </div>
   );
 }

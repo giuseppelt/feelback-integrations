@@ -1,8 +1,8 @@
+import { useEffect, useRef, useState } from "react";
 import type { TargetContent } from "@feelback/js";
 import { useFeelbackAggregates, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
 import { ButtonValueDef, ButtonValueList, FeelbackButtonList } from "../parts";
 import IconHappy from "@feelback/js/icons/icon-happy.svg";
-import { useEffect, useRef, useState } from "react";
 
 
 export type FeelbackReactionProps = Readonly<TargetContent & {
@@ -21,7 +21,7 @@ export function FeelbackReaction(props: FeelbackReactionProps) {
 
   return layout === "picker"
     ? <PickerLayout {...rest} />
-    : <FeelbackButtonList {...rest} />
+    : <FeelbackButtonList className="feelback-reaction layout-list" {...rest} />
 }
 
 
@@ -35,13 +35,13 @@ function PickerLayout(props: FeelbackReactionProps) {
 
   const { value: localValue, isRevokable } = useLocalFeelback(content) || {};
   const { data: counts } = useFeelbackAggregates(content, { paused: !showCount });
-  const { call: send, isSuccess, reset } = useSendFeelback(content);
+  const { call: send, isSuccess } = useSendFeelback(content);
   const { call: remove } = useRemoveFeelback(content);
 
   const pickerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState(false);
 
-  // handler onClick outsider picker when isOpen
+  // handler onClick outside picker
   useEffect(() => {
     if (isOpen) {
       const handler = (ev: Event) => {
@@ -79,23 +79,25 @@ function PickerLayout(props: FeelbackReactionProps) {
   }
 
   return (
-    <div className="feelback-container">
-      <button className="feelback-btn btn-picker" style={isOpen ? { visibility: "hidden" } : undefined} onClick={() => setOpen(true)}>
-        <span className="feelback-icon"><IconHappy /></span>
-      </button>
-      <div ref={pickerRef} className="picker" style={isOpen ? { display: "block", top: "0" } : undefined}>
-        <ButtonValueList items={preset} onClick={onClickReaction} />
-      </div>
+    <div className="feelback-container feelback-reaction layout-picker">
+      <div className="feelback-q">
+        <button className="feelback-btn btn-reaction-picker" style={isOpen ? { visibility: "hidden" } : undefined} onClick={() => setOpen(true)}>
+          <span className="feelback-icon"><IconHappy /></span>
+        </button>
+        <div ref={pickerRef} className="popup" style={isOpen ? { display: "block", top: "0" } : undefined}>
+          <ButtonValueList items={preset} onClick={onClickReaction} />
+        </div>
 
-      <ButtonValueList
-        items={preset}
-        hideZero
-        showCount={showCount}
-        counts={counts}
-        isDisabled={isOpen || (localValue !== undefined && !isRevokable)}
-        active={localValue}
-        onClick={onClickReaction}
-      />
+        <ButtonValueList
+          items={preset}
+          hideZero
+          showCount={showCount}
+          counts={counts}
+          isDisabled={isOpen || (localValue !== undefined && !isRevokable)}
+          active={localValue}
+          onClick={onClickReaction}
+        />
+      </div>
     </div>
   );
 }

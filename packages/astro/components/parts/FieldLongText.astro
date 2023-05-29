@@ -1,0 +1,29 @@
+---
+interface Props {
+  class?: string;
+  name?: string;
+  placeholder?: string;
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+}
+
+const {
+  class: className,
+  name,
+  placeholder = "Type your message",
+  required,
+  minLength,
+  maxLength,
+  /* */
+} = Astro.props;
+---
+
+<textarea
+  data-feelback-field
+  name={name}
+  class={className}
+  required={required}
+  placeholder={placeholder}
+  minlength={minLength}
+  maxlength={maxLength}></textarea>

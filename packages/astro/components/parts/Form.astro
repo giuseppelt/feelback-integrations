@@ -1,0 +1,25 @@
+---
+interface Props {
+  singleValue?: boolean;
+  class?: string;
+  title?: string;
+}
+
+const {
+  singleValue,
+  class: className,
+  title,
+  /** */
+} = Astro.props;
+---
+
+<form class={`feelback-form ${className}`} data-feelback-type={singleValue ? "form-single" : undefined}>
+  <div class="content">
+    {title && <span class="feelback-text form-title">{title}</span>}
+    <slot />
+    <div class="form-buttons feelback-buttons align-end">
+      <slot name="btn-cancel" />
+      <button class="feelback-btn btn-action" title="Send message" type="submit">Send</button>
+    </div>
+  </div>
+</form>

@@ -28,10 +28,9 @@ export const PRESET_PULSE_LIKE: ButtonValueDef[] = [
 ];
 
 
-
-export const PRESET_YESNO_LIKE: ButtonValueDef[] = [
-    ["y", IconLike, "Like"],
-    ["n", IconDislike, "Dislike"]
+export const PRESET_LIKE_DISLIKE: ButtonValueDef[] = [
+    ["-1", IconLike, "Like"],
+    ["+1", IconDislike, "Dislike"]
 ];
 
 export const PRESET_YESNO_CHECK: ButtonValueDef[] = [
@@ -39,13 +38,13 @@ export const PRESET_YESNO_CHECK: ButtonValueDef[] = [
     ["n", IconTimes, "No"]
 ];
 
-export const PRESET_YESNO_ARROWS: ButtonValueDef[] = [
-    ["y", IconArrowUp, "Upvote"],
-    ["n", IconArrowDown, "Downvote"]
+export const PRESET_UP_DOWN_VOTE: ButtonValueDef[] = [
+    ["+1", IconArrowUp, "Upvote"],
+    ["-1", IconArrowDown, "Downvote"]
 ];
 
 
-export const PRESET_REACTION_GITHUB: ButtonValueDef[] = [
+export const PRESET_GITHUB_EMOJI: ButtonValueDef[] = [
     ["+1", { text: "👍" }, "Like"],
     ["-1", { text: "👎" }, "Dislike"],
     ["laugh", { text: "😄" }, "Laugh"],
@@ -56,7 +55,7 @@ export const PRESET_REACTION_GITHUB: ButtonValueDef[] = [
     ["eyes", { text: "👀" }, "What?"],
 ];
 
-export const PRESET_REACTION_FACEBOOK: ButtonValueDef[] = [
+export const PRESET_FACEBOOK_EMOJI: ButtonValueDef[] = [
     ["like", { text: "👍" }, "Like"],
     ["love", { text: "❤️" }, "Love"],
     ["laugh", { text: "😄" }, "AhAh"],
@@ -65,8 +64,14 @@ export const PRESET_REACTION_FACEBOOK: ButtonValueDef[] = [
     ["angry", { text: "😡" }, "Angry"],
 ];
 
-export const PRESET_REACTION_SENTIMENT: ButtonValueDef[] = [
+export const PRESET_FEELING: ButtonValueDef[] = [
     ["happy", IconHappy, "Happy"],
     ["neutral", IconNeutral, "Neutral"],
     ["sad", IconSad, "Sad"],
 ];
+
+export const PRESET_FEEDBACK: ButtonValueDef[] = [
+    ["idea", { text: "💡" }, "Idea"],
+    ["error", { text: "💥" }, "Error"],
+    ["other", { text: "💬" }, "Other"],
+]

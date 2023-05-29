@@ -1,0 +1,79 @@
+---
+import type { TargetContent } from "../src";
+import Component from "./parts/Component.astro";
+import SwitchResult from "./parts/SwitchResult.astro";
+import TriggerButton from "./parts/TriggerButton.astro";
+import TaggedMessageForm, { PresetName } from "./forms/TaggedMessageForm.astro";
+import FeelbackForm from "./FeelbackForm.astro";
+
+type Props = TargetContent & {
+  layout?: "button-switch" | "button-dialog" | "inline";
+  preset?: PresetName;
+  title?: string;
+  label?: string;
+  minLength?: number;
+  maxLength?: number;
+  textAnswer?: string;
+  placeholder?: string;
+};
+
+const {
+  layout = "inline",
+  label = "Send feedback",
+  title = "Send feedback",
+  textAnswer = "Thanks for your feedback",
+  placeholder = "Type your message",
+  preset = "feedback",
+  minLength,
+  maxLength,
+  ...target
+} = Astro.props;
+
+const behavior = layout === "button-dialog" ? "dialog" : layout === "button-switch" ? "switch" : undefined;
+
+const formAttrs = {
+  preset,
+  title,
+  placeholder,
+  minLength,
+  maxLength,
+};
+
+const btnCancelAttrs =
+  layout === "button-switch"
+    ? {
+        "data-behavior-action": "switch",
+        "data-behavior-target": ".trigger-btn",
+        "data-behavior-source": ".feelback-form",
+      }
+    : {
+        "data-behavior-action": "cancel",
+      };
+---
+
+{
+  (layout === "button-dialog" || layout === "button-switch") && (
+    <Component component="form" class={`feelback-tagged-message layout-${layout}`} behavior={behavior} {...target}>
+      <SwitchResult textAnswer={textAnswer}>
+        <TriggerButton
+          action={layout === "button-dialog" ? "dialog" : "switch"}
+          target=".feelback-form"
+          label={label}
+        />
+        <TaggedMessageForm {...formAttrs} class={`hidden${layout === "button-dialog" ? " dialog" : ""}`}>
+          <button slot="btn-cancel" class="feelback-btn btn-cancel" title="Cancel" {...btnCancelAttrs}>
+            Cancel
+          </button>
+        </TaggedMessageForm>
+      </SwitchResult>
+    </Component>
+  )
+}
+
+{
+  layout === "inline" && (
+    <FeelbackForm class="feelback-tagged-message layout-inline" textAnswer={textAnswer} {...target}>
+      <TaggedMessageForm {...formAttrs} />
+    </FeelbackForm>
+  )
+}

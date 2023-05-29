@@ -8,7 +8,7 @@ Feelback is a service allowing to collect any type of feedback for your content,
 ## Repository structure
 This repository includes:
 - Integration SDKs with many frameworks and site builders -- dir [packages](packages)
-- Integrations examples with complete projects -- dir [samples](samples)
+- Integration examples with complete projects -- dir [samples](samples)
 
 
 ## Contributing

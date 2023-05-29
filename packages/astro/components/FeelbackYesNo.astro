@@ -1,13 +1,15 @@
 ---
 import type { TargetContent } from "../src";
-import ButtonValueList from "./parts/ButtonValueList.astro";
 import type { ButtonItem } from "./parts/ButtonValueList.astro";
-import SwitchContainer from "./parts/SwitchContainer.astro";
+import ButtonValueList from "./parts/ButtonValueList.astro";
+import Component from "./parts/Component.astro";
+import SwitchResult from "./parts/SwitchResult.astro";
 
 type PresetName = "like-dislike" | "check" | "arrows";
 
 type Props = TargetContent & {
   preset?: PresetName | readonly ButtonItem[];
+  behavior?: "switch";
   showCount?: boolean;
   showTitle?: boolean;
   revokable?: boolean;
@@ -17,6 +19,7 @@ type Props = TargetContent & {
 
 const {
   revokable,
+  behavior,
   textQuestion = "Is this page useful?",
   textAnswer = "Thanks for your feedback",
   showCount,
@@ -26,6 +29,20 @@ const {
 } = Astro.props;
 ---
 
-<SwitchContainer {...{...target, revokable, showCount, textQuestion, textAnswer}}>
-  <ButtonValueList {...{items, showTitle, showCount}} />
-</SwitchContainer>
+<Component component="buttons" class="feelback-yesno" {...{ ...target, revokable, showCount }}>
+  {
+    behavior === "switch" ? (
+      <SwitchResult textAnswer={textAnswer}>
+        <div class="feelback-q">
+          {textQuestion && <span class="feelback-text">{textQuestion}</span>}
+          <ButtonValueList {...{ items, showTitle, showCount }} />
+        </div>
+      </SwitchResult>
+    ) : (
+      <div class="feelback-q">
+        {textQuestion && <span class="feelback-text">{textQuestion}</span>}
+        <ButtonValueList {...{ items, showTitle, showCount }} />
+      </div>
+    )
+  }
+</Component>

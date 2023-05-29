@@ -1,0 +1,16 @@
+---
+interface Props {
+  textAnswer?: string;
+}
+
+const { textAnswer } = Astro.props;
+---
+
+<div data-behavior-switch-side="a">
+  <slot />
+</div>
+<div class="feelback-a hidden" data-behavior-switch-side="b">
+  <slot name="side-b">
+    {textAnswer && <span class="feelback-text">{textAnswer}</span>}
+  </slot>
+</div>

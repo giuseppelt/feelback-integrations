@@ -56,6 +56,20 @@
             "presentation": {
                 "reveal": "never"
             }
+        },
+        {
+            "label": "example docusaurus",
+            "type": "npm",
+            "script": "start",
+            "group": "build",
+            "path": "${workspaceFolder}/samples/docusaurus",
+            "options": {
+                "cwd": "${workspaceFolder}/samples/docusaurus"
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            }
         }
     ]
 }

@@ -19,8 +19,8 @@ const PRESETS = {
   "pulse-star": [["+", [iconStar, iconStarActive], "Star"]],
   "pulse-like": [["+", [iconLike, iconLikeActive], "Like"]],
   "like-dislike": [
-    ["y", iconLike, "Like"],
-    ["n", iconDislike, "Dislike"],
+    ["+1", iconLike, "Like"],
+    ["-1", iconDislike, "Dislike"],
   ],
   check: [
     ["y", iconCheck, "Yes"],
@@ -30,7 +30,7 @@ const PRESETS = {
     ["y", iconArrowUp, "Upvote"],
     ["n", iconArrowDown, "Downvote"],
   ],
-  sentiment: [
+  feeling: [
     ["happy", iconHappy, "Happy"],
     ["neutral", iconNeutral, "Neutral"],
     ["sad", iconSad, "Sad"],
@@ -53,30 +53,64 @@ const PRESETS = {
     ["sad", "😥", "Cry"],
     ["angry", "😡", "Angry"],
   ],
+  feedback: [
+    ["idea", "💡", "Idea"],
+    ["error", "💥", "Error"],
+    ["other", "💬", "Message"],
+  ],
 } satisfies Record<string, ButtonItem[]>;
 
 export type PresetName = keyof typeof PRESETS;
 export type ButtonItem = readonly [value: string, icon: string | readonly [string, string], title: string | undefined];
 
 interface Props {
+  action?: "send" | "set-field";
+  field?: string;
+  class?: string;
   hideZero?: boolean;
+  hideZeroCount?: boolean;
+  showLabel?: boolean;
   showTitle?: boolean;
   showCount?: boolean;
+  active?: string | number;
   items: PresetName | readonly ButtonItem[];
 }
 
-const { showTitle = true, showCount = false, hideZero = false, items: _items } = Astro.props;
+const {
+  action = "send",
+  field,
+  showTitle = true,
+  showCount = false,
+  showLabel = false,
+  hideZero = false,
+  hideZeroCount = true,
+  active: _active,
+  class: className,
+  items: _items,
+} = Astro.props;
 
 const items = typeof _items === "string" ? PRESETS[_items] : _items;
 if (items.length < 1) {
   throw new Error("No feelback button values specified");
 }
+
+const active = typeof _active === "number" ? items[_active][0] : _active;
 ---
 
-<div class={`feelback-buttons${showCount ? " with-count" : ""}${hideZero ? " hide-zero" : ""}`}>
+<div
+  data-feelback-type="button-group"
+  class={`feelback-buttons${className ? " " + className : ""}${showCount ? " with-count" : ""}${
+    hideZero ? " hide-zero" : ""
+  }`}
+>
   {
     items.map(([value, html, title], buttonIdx) => (
-      <button title={showTitle ? title : undefined} class="feelback-btn" data-feelback-value={value}>
+      <button
+        title={showTitle ? title : undefined}
+        class={`feelback-btn${active === value ? " active" : ""}`}
+        data-feelback-action={action}
+        data-feelback-value={value}
+      >
         {!Array.isArray(html) ? (
           <span class="feelback-icon" set:html={html} />
         ) : (
@@ -85,8 +119,17 @@ if (items.length < 1) {
             <span class="feelback-icon active" set:html={html[1]} />
           </>
         )}
-        {showCount && <span class="feelback-count" data-feelback-count={value} data-feelback-count-index={buttonIdx} />}
+        {showLabel && title && <span class="label">{title}</span>}
+        {showCount && (
+          <span
+            class={`feelback-count${hideZeroCount ? " hide-zero" : ""}`}
+            data-feelback-count={value}
+            data-feelback-count-index={buttonIdx}
+          />
+        )}
       </button>
     ))
   }
+
+  {field && <input name={field} data-feelback-field type="hidden" value={active} />}
 </div>

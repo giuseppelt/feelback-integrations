@@ -11,5 +11,5 @@ export default function InfoWrapper(props) {
         <FeelbackPulse preset={PRESET_PULSE_HEART} contentSetId="7cd3d541-35e9-44f5-b3c4-b847226c3c32" showCount />
       </div>
     </div>
-  )
+  );
 }

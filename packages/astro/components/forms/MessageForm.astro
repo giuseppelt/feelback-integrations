@@ -1,0 +1,25 @@
+---
+import Form from "../parts/Form.astro";
+import FieldLongText from "../parts/FieldLongText.astro";
+
+interface Props {
+  class?: string;
+  title?: string;
+  placeholder?: string;
+  minLength?: number;
+  maxLength?: number;
+}
+
+const {
+  class: className,
+  title = "Send feedback",
+  placeholder = "Type your message",
+  minLength,
+  maxLength,
+} = Astro.props;
+---
+
+<Form singleValue class={className} title={title}>
+  <FieldLongText {...{placeholder, minLength, maxLength}} />
+  <slot name="btn-cancel" slot="btn-cancel" />
+</Form>

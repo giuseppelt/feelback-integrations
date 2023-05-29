@@ -1,11 +1,13 @@
 ---
 import ThemeToggleButton from "./ThemeToggleButton";
-import { COMMUNITY_INVITE_URL, FEELBACK } from "../../consts";
+import { COMMUNITY_INVITE_URL } from "../../consts";
 import "astro-feelback/styles/feelback.scss";
 import FeelbackYesNo from "astro-feelback/components/FeelbackYesNo.astro";
 import FeelbackReactionList from "astro-feelback/components/FeelbackReactionList.astro";
 import FeelbackPulse from "astro-feelback/components/FeelbackPulse.astro";
 import FeelbackReactionPicker from "astro-feelback/components/FeelbackReactionPicker.astro";
+import FeelbackMessage from "astro-feelback/components/FeelbackMessage.astro";
+import FeelbackTaggedMessage from "astro-feelback/components/FeelbackTaggedMessage.astro";
 
 type Props = {
   editHref: string;
@@ -72,16 +74,22 @@ const showMoreSection = Boolean(COMMUNITY_INVITE_URL);
 </ul>
 
 <div style="margin-top: 1rem; margin-left: 1rem;">
-  <FeelbackPulse contentSetId="7cd3d541-35e9-44f5-b3c4-b847226c3c32" preset="heart" showCount />
+  <FeelbackPulse contentSetId="597f4543-e697-4c10-844b-c9ad33a2c524" preset="heart" showCount />
 </div>
 <div style="margin-top: 1rem; margin-left: 1rem;">
-  <FeelbackYesNo contentSetId={FEELBACK.setId} preset="check" />
+  <FeelbackYesNo contentSetId="3d15a53e-079b-4eea-a6c8-fbc02625adfa" preset="check" behavior="switch" />
 </div>
 <div style="margin-top: 1rem; margin-left: 1rem;">
-  <FeelbackReactionList contentSetId="b7e980e2-b72b-4b0e-8403-a8b56b786709" preset="sentiment" />
+  <FeelbackReactionList contentSetId="b7e980e2-b72b-4b0e-8403-a8b56b786709" preset="feeling" />
 </div>
 <div style="margin-top: 1rem; margin-left: 1rem;">
-  <FeelbackReactionPicker contentSetId="e79902da-d8e2-4c47-ab89-e849c1a6e3e6" preset="github" showCount />
+  <FeelbackReactionPicker contentSetId="cf0bdc41-4db8-4ddd-95cf-400b971d5169" preset="github" showCount />
+</div>
+<div style="margin-top: 1rem; margin-left: 1rem;">
+  <FeelbackMessage contentSetId="6a5c1dfb-ef88-4b16-ab6d-d91e9a69fee1" label="Send feedback" layout="button-switch" />
+</div>
+<div style="margin-top: 1rem; margin-left: 1rem;">
+  <FeelbackTaggedMessage contentSetId="51ed5897-9a89-4570-ae41-e6610ba2fbe1" label="Send feedback" preset="feedback" />
 </div>
 
 <div style="margin: 2rem 0; text-align: center;">

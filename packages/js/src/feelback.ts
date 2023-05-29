@@ -19,7 +19,7 @@ export async function sendFeelback(params: TargetContent & {
         revokable = true,
         value,
         metadata,
-        expireIn = 3600 // 1day
+        expireIn = 3600 // 1h
     } = params;
 
     const target = "contentId" in params
@@ -31,7 +31,7 @@ export async function sendFeelback(params: TargetContent & {
 
     const result = revoke
         ? await http.post(`${endpoint}/feelbacks/edit`, { ...revoke, value })
-        : await http.post(`${endpoint}/feelbacks/create`, { ...target, value, metadata });
+        : await http.post(`${endpoint}/feelbacks/create`, { ...target, value, context: metadata });
 
     storage?.add({
         ...result as any,

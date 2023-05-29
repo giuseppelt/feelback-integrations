@@ -3,6 +3,9 @@ import esbuild from "esbuild";
 import svgr from "esbuild-plugin-svgr";
 import { run } from "./utils.js";
 
+const svgrConfig: Parameters<typeof svgr>[0] = {
+    plugins: ["@svgr/plugin-jsx"],
+};
 
 await fs.rm("./dist", { force: true, recursive: true });
 await Promise.all([
@@ -12,7 +15,7 @@ await Promise.all([
     // bundle for esm
     esbuild.build({
         plugins: [
-            svgr(),
+            svgr(svgrConfig),
         ],
         entryPoints: ["src/index.ts"],
         bundle: true,
@@ -25,7 +28,7 @@ await Promise.all([
     // bundle for commonjs
     esbuild.build({
         plugins: [
-            svgr(),
+            svgr(svgrConfig),
         ],
         entryPoints: ["src/index.ts"],
         bundle: true,

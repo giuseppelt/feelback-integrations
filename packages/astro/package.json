@@ -1,6 +1,6 @@
 {
     "name": "astro-feelback",
-    "version": "0.1.1-pre",
+    "version": "0.2.0",
     "description": "Use Feelback service within your Astro website",
     "type": "module",
     "exports": {
@@ -12,7 +12,9 @@
     },
     "scripts": {
         "prepublishOnly": "node ./tasks/copyAssets.js",
-        "build": "tsc"
+        "build": "tsc",
+        "assets:copy": "node ./tasks/copyAssets.js",
+        "assets:link": "node ./tasks/linkAssets.js"
     },
     "keywords": [
         "astro",
@@ -49,8 +51,8 @@
         "@feelback/js": "workspace:*"
     },
     "devDependencies": {
-        "@types/node": "^16.18.25",
-        "astro": "^2.3.1",
+        "@types/node": "^18.16.16",
+        "astro": "^2.5.5",
         "typescript": "5.0.4"
     }
 }

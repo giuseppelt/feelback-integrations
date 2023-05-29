@@ -1,0 +1,25 @@
+---
+import type { TargetContent } from "../src";
+import Component from "./parts/Component.astro";
+import SwitchResult from "./parts/SwitchResult.astro";
+
+type Props = TargetContent & {
+  class?: string;
+  title?: string;
+  textAnswer?: string;
+};
+
+const {
+  class: className,
+  title = "Send feedback",
+  textAnswer = "Thanks for your feedback",
+  ...target
+  /* */
+} = Astro.props;
+---
+
+<Component component="form" class={className} {...target}>
+  <SwitchResult textAnswer={textAnswer}>
+    <slot />
+  </SwitchResult>
+</Component>

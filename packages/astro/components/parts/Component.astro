@@ -1,0 +1,26 @@
+---
+import type { TargetContent } from "../../src";
+import { getTarget } from "../utils";
+import FeelbackLoader from "./FeelbackLoader.astro";
+
+type Props = TargetContent & {
+  class?: string;
+  component: "form" | "buttons";
+  behavior?: string;
+  revokable?: boolean;
+  showCount?: boolean;
+};
+
+const { class: className, ...props } = Astro.props;
+
+const config = {
+  ...props,
+  ...getTarget(props),
+};
+---
+
+<FeelbackLoader />
+
+<div class={`feelback-container${className ? " " + className : ""}`} data-feelback={JSON.stringify(config)}>
+  <slot />
+</div>

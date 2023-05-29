@@ -1,0 +1,31 @@
+---
+import type { ButtonItem } from "../parts/ButtonValueList.astro";
+import Form from "../parts/Form.astro";
+import FieldLongText from "../parts/FieldLongText.astro";
+import FieldButtonValueList from "../parts/FieldButtonValueList.astro";
+
+export type PresetName = "feeling" | "like-dislike" | "feedback";
+
+interface Props {
+  preset: PresetName | readonly ButtonItem[];
+  class?: string;
+  title?: string;
+  placeholder?: string;
+  minLength?: number;
+  maxLength?: number;
+}
+
+const {
+  class: className,
+  preset,
+  title = "Send feedback",
+  placeholder = "Type your message",
+  minLength,
+  maxLength,
+} = Astro.props;
+---
+
+<Form class={className} title={title}>
+  <FieldButtonValueList name="tag" value={0} showLabels {...{preset}} />
+  <FieldLongText name="message" {...{placeholder, minLength, maxLength}} />
+</Form>

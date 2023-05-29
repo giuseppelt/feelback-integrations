@@ -2,9 +2,10 @@
 import type { TargetContent } from "../src";
 import type { ButtonItem } from "./parts/ButtonValueList.astro";
 import ButtonValueList from "./parts/ButtonValueList.astro";
-import SwitchContainer from "./parts/SwitchContainer.astro";
+import Component from "./parts/Component.astro";
+import SwitchResult from "./parts/SwitchResult.astro";
 
-type PresetName = "sentiment" | "github" | "facebook";
+type PresetName = "feeling" | "github" | "facebook";
 
 type Props = TargetContent & {
   preset: PresetName | readonly ButtonItem[];
@@ -26,6 +27,11 @@ const {
 } = Astro.props;
 ---
 
-<SwitchContainer {...{...target,revokable,showCount,textQuestion,textAnswer}}>
-  <ButtonValueList {...{items, showTitle,showCount}} />
-</SwitchContainer>
+<Component component="buttons" class="feelback-reaction layout-list" {...{ ...target, revokable, showCount }}>
+  <SwitchResult textAnswer={textAnswer}>
+    <div class="feelback-q">
+      {textQuestion && <span class="feelback-text">{textQuestion}</span>}
+      <ButtonValueList {...{ items, showTitle, showCount }} />
+    </div>
+  </SwitchResult>
+</Component>

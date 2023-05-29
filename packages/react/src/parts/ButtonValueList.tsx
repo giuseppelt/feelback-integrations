@@ -6,8 +6,10 @@ export type ButtonValueDef = readonly [value: string, icon: ButtonIcon | readonl
 export type ButtonValueListProps = Readonly<{
   active?: unknown
   hideZero?: boolean
+  hideZeroCount?: boolean
   showTitle?: boolean
   showCount?: boolean
+  showLabels?: boolean
   isDisabled?: boolean
   items: readonly ButtonValueDef[]
   counts?: readonly number[]
@@ -19,7 +21,9 @@ export function ButtonValueList(props: ButtonValueListProps) {
     active,
     showTitle = true,
     showCount = false,
+    showLabels = false,
     hideZero = false,
+    hideZeroCount = true,
     isDisabled = false,
     items,
     counts,
@@ -27,9 +31,12 @@ export function ButtonValueList(props: ButtonValueListProps) {
   } = props;
 
   return (
-    <div className={`feelback-buttons ${showCount ? "with-count" : ""} ${hideZero ? "hide-zero" : ""}`}>
+    <div className={`feelback-buttons${showCount && items.length > 1 ? " with-count" : ""}`}>
       {items.map(([value, icon, title], idx) => {
-        if (hideZero && (counts?.[idx] || 0) <= 0) {
+        // if a value is active, force it to 1
+        // even if count is 0, 
+        const count = counts?.[idx] || (active === value ? 1 : 0);
+        if (hideZero && count <= 0) {
           return null;
         }
 
@@ -37,8 +44,9 @@ export function ButtonValueList(props: ButtonValueListProps) {
           <ButtonValue
             key={value}
             title={showTitle && title || undefined}
+            label={showLabels && title || undefined}
             icon={icon}
-            count={showCount && counts?.[idx]}
+            count={showCount && count || (hideZeroCount ? undefined : 0)}
             isDisabled={isDisabled}
             isActive={active === value}
             onClick={() => onClick?.(value)}

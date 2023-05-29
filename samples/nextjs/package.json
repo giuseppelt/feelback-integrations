@@ -1,0 +1,26 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@feelback/react": "*",
+    "@types/node": "20.2.5",
+    "@types/react": "^18.2.7",
+    "@types/react-dom": "^18.2.4",
+    "next": "13.4.4",
+    "react": "^18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.0.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "@feelback/react": "link:../../packages/react/"
+    }
+  }
+}

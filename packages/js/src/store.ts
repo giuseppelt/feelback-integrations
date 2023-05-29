@@ -30,11 +30,16 @@ class FeelbackStore {
     private feelbacks: FeelbackStoreEntry[] | undefined = undefined;
 
     constructor(type?: FeelbackStoreType) {
-        this.storage = localStorage;
+        type ??= "local";
+        if (typeof window === "undefined") {
+            type = "memory";
+        }
 
-        if (type === "session") {
-            this.storage = sessionStorage;
-        } else if (type === "memory") {
+        if (type === "local") {
+            this.storage = window.localStorage;
+        } else if (type === "session") {
+            this.storage = window.sessionStorage;
+        } else {
             const NOOP = (() => { }) as (...args: any) => any
             this.storage = {
                 getItem: NOOP,

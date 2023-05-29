@@ -1,9 +1,3 @@
-
-export const FEELBACK = {
-	setId: "19107c7b-1d94-412f-9c93-6f42062f1659"
-}
-
-
 export const SITE = {
 	title: 'Documentation',
 	description: 'Your website description.',

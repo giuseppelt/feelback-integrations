@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { useIsMounted } from "./useIsMounted";
 
 
@@ -42,6 +42,7 @@ const INITIAL_STATE = {
 export function useAsyncCall<O, I extends any[]>(func: (...input: I) => Promise<O>): Output<O, I>;
 export function useAsyncCall<O>(func: () => Promise<O>, deps?: any[], options?: UseAsyncCallOptions): Output<O, []>;
 export function useAsyncCall<O, I extends any[]>(func: (...args: any[]) => Promise<O>, deps?: any[], options?: UseAsyncCallOptions): Output<O, I> {
+    const callId = useRef(0);
     const isMounted = useIsMounted();
     const isPaused = !!options?.paused;
     const isInitialLoading = !!deps && !isPaused;
@@ -49,6 +50,7 @@ export function useAsyncCall<O, I extends any[]>(func: (...args: any[]) => Promi
     const [state, dispatch] = useReducer(reducer, isInitialLoading, isLoading => ({ ...INITIAL_STATE, isLoading }));
 
     async function call(...args: any[]) {
+        const actualCallId = ++callId.current;
         try {
             if (!state.isLoading) {
                 dispatch({ type: "LOADING" });
@@ -56,14 +58,14 @@ export function useAsyncCall<O, I extends any[]>(func: (...args: any[]) => Promi
 
             const data = await func(...args);
 
-            if (isMounted()) {
+            if (isMounted() && actualCallId === callId.current) {
                 dispatch({ type: "SUCCESS", data });
             }
 
             return reducer(state as any, { type: "SUCCESS", data });
 
         } catch (error: any) {
-            if (isMounted()) {
+            if (isMounted() && actualCallId === callId.current) {
                 dispatch({ type: "ERROR", error });
             }
 

@@ -5,6 +5,7 @@ import { ButtonValueDef, ButtonValueList } from ".";
 
 
 export type FeelbackButtonListProps = Readonly<TargetContent & {
+  className?: string
   preset?: readonly ButtonValueDef[]
   showCount?: boolean
   textQuestion?: string
@@ -13,6 +14,7 @@ export type FeelbackButtonListProps = Readonly<TargetContent & {
 
 export function FeelbackButtonList(props: FeelbackButtonListProps) {
   const {
+    className,
     showCount,
     preset,
     textQuestion,
@@ -46,7 +48,7 @@ export function FeelbackButtonList(props: FeelbackButtonListProps) {
   }
 
   return (
-    <div className="feelback-container">
+    <div className={`feelback-container${className ? " " + className : ""}`}>
       {!isAnswerVisible &&
         <div className="feelback-q">
           {textQuestion && <span className="feelback-text">{textQuestion}</span>}

@@ -4,11 +4,12 @@ import type { ButtonItem } from "./parts/ButtonValueList.astro";
 import FeelbackReactionPicker from "./FeelbackReactionPicker.astro";
 import FeelbackReactionList from "./FeelbackReactionList.astro";
 
-type PresetName = "sentiment" | "github" | "facebook";
+type PresetName = "feeling" | "github" | "facebook";
 
 type Props = TargetContent & {
   preset: PresetName | readonly ButtonItem[];
   layout?: "picker" | "list";
+  pickerTitle?: string;
   showCount?: boolean;
   showTitle?: boolean;
   revokable?: boolean;
@@ -16,7 +17,7 @@ type Props = TargetContent & {
   textAnswer?: string;
 };
 
-const { layout = "list", ...props } = Astro.props;
+const { layout = "list", pickerTitle, ...props } = Astro.props;
 ---
 
-{layout === "list" ? <FeelbackReactionList {...props} /> : <FeelbackReactionPicker {...props} />}
+{layout === "list" ? <FeelbackReactionList {...props} /> : <FeelbackReactionPicker title={pickerTitle} {...props} />}

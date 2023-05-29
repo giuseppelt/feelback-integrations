@@ -1,0 +1,18 @@
+---
+interface Props {
+  class?: string;
+  label: string;
+  title?: string;
+  action: "switch" | "dialog";
+  target: string;
+}
+
+const { class: className, label, title, action, target } = Astro.props;
+---
+
+<button
+  class={`feelback-btn btn-action trigger-btn${className ? " " + className : ""}`}
+  data-behavior-action={action}
+  data-behavior-target={target}
+  title={title}>{label}</button
+>

@@ -49,6 +49,7 @@
         "mjml",
         "mobx",
         "nestjs",
+        "nextra",
         "nocheck",
         "nodenext",
         "outdir",

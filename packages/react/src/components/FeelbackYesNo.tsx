@@ -1,5 +1,8 @@
+import { FeelbackButtonListProps, FeelbackButtonList } from "../parts";
 
-export {
-  type FeelbackButtonListProps as FeelbackYesNoProps,
-  FeelbackButtonList as FeelbackYesNo
-} from "../parts"
+
+export type FeelbackYesNoProps = FeelbackButtonListProps
+
+export function FeelbackYesNo(props: FeelbackYesNoProps) {
+  return <FeelbackButtonList className="feelback-yesno" {...props} />
+}

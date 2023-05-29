@@ -1,6 +1,6 @@
 {
     "name": "@feelback/js",
-    "version": "0.1.1-pre",
+    "version": "0.2.0",
     "description": "Client side js integration for Feelback service",
     "type": "module",
     "types": "./dist/index.d.ts",
@@ -55,9 +55,9 @@
         "CHANGELOG.md"
     ],
     "devDependencies": {
-        "@types/node": "^16.18.25",
+        "@types/node": "^18.16.16",
         "dotenv": "^16.0.3",
-        "esbuild": "^0.17.18",
+        "esbuild": "^0.17.19",
         "esbuild-sass-plugin": "^2.9.0",
         "sass": "^1.62.1",
         "ts-node": "^10.9.1",

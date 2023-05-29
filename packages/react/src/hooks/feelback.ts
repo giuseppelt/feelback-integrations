@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { getFeelbackAggregates, sendFeelback, TargetContent, calculateContentKey, removeFeelback, getFeelbackStore } from "@feelback/js";
+import { useRef } from "react";
+import { getFeelbackAggregates, sendFeelback, TargetContent, removeFeelback, getFeelbackStore } from "@feelback/js";
 import { useFeelbackContext } from "../components";
 import { useAsyncCall } from "./useAsyncCall";
 
@@ -49,7 +49,7 @@ export function useRemoveFeelback(content: TargetContent) {
     });
 }
 
-export function useLocalFeelback(resource: TargetContent) {
+export function useLocalFeelback(content: TargetContent) {
     const context = useFeelbackContext();
     if (context?.store === "none") {
         return;
@@ -58,29 +58,9 @@ export function useLocalFeelback(resource: TargetContent) {
     const store = getFeelbackStore(context?.store) || undefined;
 
     return {
-        value: store.getValue(resource),
-        isRevokable: store.isRevokable(resource)
-    } as const
-}
-
-export function useFeelbackResourceId(content: TargetContent, pathListener?: (listener: (url: string) => void) => (() => void)): TargetContent {
-    const contentKey = "contentSetId" in content ? content.key : false;
-    const [contentId, setContentId] = useState(content);
-
-    useEffect(() => {
-        const hasAutoKey = contentKey !== false && (!contentKey || contentKey.startsWith("$"));
-        if (hasAutoKey) {
-            return pathListener?.(url => setContentId(x => {
-                if (!("contentSetId" in x)) return x;
-                return {
-                    contentSetId: x.contentSetId,
-                    key: calculateContentKey(contentKey, url)
-                };
-            }));
-        }
-    }, [contentKey, pathListener]);
-
-    return useMemoTargetContent(contentId);
+        value: store.getValue(content),
+        isRevokable: store.isRevokable(content)
+    } as const;
 }
 
 function useMemoTargetContent(content: TargetContent): TargetContent {
