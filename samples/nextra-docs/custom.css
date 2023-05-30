@@ -1,0 +1,29 @@
+.feelback-container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+@media (min-width: 769px) {
+    .feelback-container {
+        max-width: 340px;
+    }
+}
+
+.feelback-container textarea {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    padding: .3rem .4rem;
+    font-size: 0.9rem;
+}
+
+.feelback-container .feelback-btn .label {
+    display: none;
+}
+
+.feelback-container .feelback-btn:nth-child(1).active {
+    background-color: rgb(149, 233, 190);
+}
+
+.feelback-container .feelback-btn:nth-child(2).active {
+    background-color: rgb(255, 187, 187);
+}

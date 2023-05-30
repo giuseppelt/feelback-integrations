@@ -1,5 +1,6 @@
 import { DocsThemeConfig } from "nextra-theme-docs";
 import { FeelbackTaggedMessage, PRESET_LIKE_DISLIKE } from "@feelback/react";
+import "@feelback/react/styles/feelback.css";
 
 
 export default {
@@ -7,19 +8,13 @@ export default {
     project: {
         link: "https://github.com/shuding/nextra"
     },
-    // feedback: {
-    //     content: () => {
-    //         return <FeelbackMessage contentSetId="" layout="button-dialog" />
-    //     }
-    // }
-    // footer: {
-    //     text: "hello"
-    // }
+    feedback: { content: null },
     main: ({ children }) => {
         return (
             <>
                 {children}
-                <FeelbackTaggedMessage contentSetId="" layout="inline" preset={PRESET_LIKE_DISLIKE} />
+                <hr />
+                <FeelbackTaggedMessage title="Did you find this page useful?" contentSetId="" layout="inline" preset={PRESET_LIKE_DISLIKE} />
             </>
         );
     }

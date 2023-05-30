@@ -20,7 +20,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@feelback/react": "link:../../packages/react/"
+      "@feelback/react": "link:../../packages/react/",
+      "react": "link:../../packages/react/node_modules/react/"
     }
   }
 }
