@@ -1,5 +1,8 @@
 # @feelback/js changelog
 
+## 0.2.1 Patch release
+- fix: dialog style
+
 ## 0.2.0 Major release
 - feat: added message and tagged-message feelback types
 - feat: added component behaviors ie. switch, popup, dialog
