@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef } from "react";
-import { useIsMounted } from "./useIsMounted";
+import { useIsMounted } from ".";
 
 
 export type UseAsyncCallOptions = Readonly<{

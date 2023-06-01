@@ -1,4 +1,4 @@
-import { ButtonIcon, ButtonValue } from "./ButtonValue";
+import { ButtonIcon, ButtonValue } from ".";
 
 
 export type ButtonValueDef = readonly [value: string, icon: ButtonIcon | readonly [ButtonIcon, ButtonIcon], title: string | undefined]

@@ -1,8 +1,8 @@
-import { ReactElement, ReactNode, cloneElement, useState } from "react"
+import { ReactElement, cloneElement, forwardRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { TargetContent } from "@feelback/js"
-import { useSendFeelback } from "../hooks"
-import { FormHandlerProps } from "./Form";
+import { TargetContent } from "@feelback/js";
+import { useSendFeelback, useOnClickOutside } from "../hooks";
+import { FormHandlerProps } from ".";
 
 
 export type FeelbackButtonFormProps = Readonly<TargetContent & {
@@ -13,7 +13,7 @@ export type FeelbackButtonFormProps = Readonly<TargetContent & {
   children: ReactElement<FormHandlerProps<any>>
 }>
 
-export function FeelbackButtonForm(props: FeelbackButtonFormProps) {
+export const FeelbackButtonForm = forwardRef<HTMLDivElement, FeelbackButtonFormProps>((props, ref) => {
   const {
     className,
     layout,
@@ -27,7 +27,7 @@ export function FeelbackButtonForm(props: FeelbackButtonFormProps) {
   const { call: send, isSuccess } = useSendFeelback(content);
 
   return (
-    <div className={`feelback-container${className ? " " + className : ""}`}>
+    <div ref={ref} className={`feelback-container${className ? " " + className : ""}`}>
       {!isSuccess && (() => {
         switch (layout) {
           case "button-switch":
@@ -41,7 +41,7 @@ export function FeelbackButtonForm(props: FeelbackButtonFormProps) {
             return (
               <OpenButton label={label} behavior="disable-when-open">
                 {onClose => (
-                  <Dialog>
+                  <Dialog onClose={onClose}>
                     {cloneElement(Form, { onSubmit: send, onCancel: onClose })}
                   </Dialog>
                 )}
@@ -61,7 +61,7 @@ export function FeelbackButtonForm(props: FeelbackButtonFormProps) {
       }
     </div>
   );
-}
+});
 
 
 type OpenButtonProps = Readonly<{
@@ -98,18 +98,22 @@ function OpenButton(props: OpenButtonProps) {
 
 
 type DialogProps = Readonly<{
-  children: ReactNode
+  onClose: () => void
+  children: ReactElement
 }>
 
 function Dialog(props: DialogProps) {
   const {
+    onClose,
     children,
   } = props;
+
+  const contentRef = useOnClickOutside<HTMLDivElement>(true, onClose);
 
   return createPortal((
     <div className="feelback-style">
       <div className="dialog">
-        {children}
+        {cloneElement(children, { ref: contentRef })}
       </div>
     </div>
   ), document.body);

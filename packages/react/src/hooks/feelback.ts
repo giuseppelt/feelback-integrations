@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { getFeelbackAggregates, sendFeelback, TargetContent, removeFeelback, getFeelbackStore } from "@feelback/js";
 import { useFeelbackContext } from "../components";
-import { useAsyncCall } from "./useAsyncCall";
+import { useAsyncCall } from ".";
 
 
 export function useFeelbackAggregates(content: TargetContent, options?: { paused: boolean }) {

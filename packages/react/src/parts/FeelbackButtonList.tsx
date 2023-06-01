@@ -1,6 +1,5 @@
 import type { TargetContent } from "@feelback/js";
-import { useFeelbackAggregates, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
-import { useTimeout } from "../hooks/useTimeout";
+import { useFeelbackAggregates, useTimeout, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
 import { ButtonValueDef, ButtonValueList } from ".";
 
 

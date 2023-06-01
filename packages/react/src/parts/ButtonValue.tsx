@@ -1,4 +1,4 @@
-import React, { ReactElement, FC, ComponentClass, createElement, isValidElement } from "react";
+import { ReactElement, FC, ComponentClass, createElement, isValidElement } from "react";
 
 
 export type ButtonIcon = ReactElement | FC | ComponentClass | { text: string }

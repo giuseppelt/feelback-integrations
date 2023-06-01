@@ -1,7 +1,6 @@
-import { useRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { TargetContent } from "@feelback/js";
-import { ButtonValueDef, ButtonValueList, FeelbackButtonForm } from "../parts";
-import { Form, FormHandlerProps } from "../parts/Form";
+import { ButtonValueDef, ButtonValueList, FeelbackButtonForm, Form, FormHandlerProps } from "../parts";
 
 
 export type FeelbackTaggedMessageProps = Readonly<TargetContent & {
@@ -46,7 +45,7 @@ type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message: string }>
   placeholder?: string
 }>
 
-function TaggedMessageForm(props: TaggedMessageFormProps) {
+const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) => {
   const {
     title = "Send feedback",
     preset,
@@ -72,7 +71,7 @@ function TaggedMessageForm(props: TaggedMessageFormProps) {
   }
 
   return (
-    <Form {...{ title, onCancel, onSubmit }} onValidate={onValidate}>
+    <Form {...{ title, onCancel, onSubmit, ref }} onValidate={onValidate}>
       <ButtonValueList items={preset} showLabels active={tag} onClick={setTag} />
       <textarea ref={messageRef}
         required
@@ -82,4 +81,4 @@ function TaggedMessageForm(props: TaggedMessageFormProps) {
       />
     </Form>
   );
-}
+});

@@ -1,7 +1,6 @@
-import { useRef, useState } from "react";
+import { forwardRef, useRef } from "react";
 import { TargetContent } from "@feelback/js";
-import { FeelbackButtonForm } from "../parts";
-import { Form, FormHandlerProps } from "../parts/Form";
+import { FeelbackButtonForm, Form, FormHandlerProps } from "../parts";
 
 
 export type FeelbackMessageProps = Readonly<TargetContent & {
@@ -43,7 +42,7 @@ type MessageFormProps = FormHandlerProps<string> & Readonly<{
   placeholder?: string
 }>
 
-function MessageForm(props: MessageFormProps) {
+const MessageForm = forwardRef<any, MessageFormProps>((props, ref) => {
   const {
     title = "Send feedback",
     placeholder = "Type your message",
@@ -61,7 +60,7 @@ function MessageForm(props: MessageFormProps) {
   };
 
   return (
-    <Form {...{ title, onCancel, onSubmit }} onValidate={onValidate}>
+    <Form {...{ title, onCancel, onSubmit, ref }} onValidate={onValidate}>
       <textarea ref={textRef}
         required
         placeholder={placeholder}
@@ -70,4 +69,4 @@ function MessageForm(props: MessageFormProps) {
       />
     </Form>
   );
-}
+});

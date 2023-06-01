@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { TargetContent } from "@feelback/js";
-import { useFeelbackAggregates, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
+import { useFeelbackAggregates, useOnClickOutside, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
 import { ButtonValueDef, ButtonValueList, FeelbackButtonList } from "../parts";
 import IconHappy from "@feelback/js/icons/icon-happy.svg";
 
@@ -38,25 +38,8 @@ function PickerLayout(props: FeelbackReactionProps) {
   const { call: send, isSuccess } = useSendFeelback(content);
   const { call: remove } = useRemoveFeelback(content);
 
-  const pickerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState(false);
-
-  // handler onClick outside picker
-  useEffect(() => {
-    if (isOpen) {
-      const handler = (ev: Event) => {
-        if (!ev.target || !pickerRef.current?.contains(ev.target as Node)) {
-          setOpen(false);
-          ev.stopPropagation();
-          ev.preventDefault();
-        }
-      };
-
-      document.addEventListener("click", handler, { capture: true });
-      return () => document.removeEventListener("click", handler, { capture: true });
-    }
-  }, [isOpen]);
-
+  const pickerRef = useOnClickOutside<HTMLDivElement>(isOpen, () => setOpen(false));
 
   const onClickReaction = (value: string) => {
     if (isOpen) {

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactElement, ReactNode, forwardRef } from "react";
 
 
 export type FormHandlerProps<T> = Readonly<{
@@ -12,7 +12,7 @@ export type FormProps<T> = FormHandlerProps<T> & Readonly<{
   onValidate: () => T | undefined
 }>
 
-export function Form<T>(props: FormProps<T>) {
+export const Form = forwardRef<HTMLDivElement, FormProps<any>>((props, ref) => {
   const {
     title = "Send feedback",
     onCancel,
@@ -30,7 +30,7 @@ export function Form<T>(props: FormProps<T>) {
   }
 
   return (
-    <div className="feelback-form">
+    <div ref={ref} className="feelback-form">
       <div className="content">
         {title && <span className="feelback-text form-title">{title}</span>}
 
@@ -42,5 +42,5 @@ export function Form<T>(props: FormProps<T>) {
       </div>
     </div>
   );
-}
+}) as <T>(props: FormProps<T>) => ReactElement;
 
