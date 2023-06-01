@@ -31,3 +31,29 @@
 
 
 @import "@feelback/react/styles/feelback.css";
+
+
+.feelback-sidebar .feelback-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.feelback-sidebar .feelback-q .feelback-text {
+  flex-grow: 1;
+}
+
+
+article .feelback-container .feelback-btn .label {
+  display: none;
+}
+
+article .feelback-container .feelback-btn.active {
+  background-color: #1a8870;
+  color: white;
+}
+
+article .feelback-container textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
