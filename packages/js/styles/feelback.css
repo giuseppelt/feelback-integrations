@@ -56,10 +56,13 @@
   z-index: 99999;
   background-color: rgba(0, 0, 66, 0.15);
 }
-.feelback-container .dialog .content,
-.feelback-style .dialog .content {
+.feelback-container .dialog > :first-child,
+.feelback-style .dialog > :first-child {
   margin: 10% auto;
   max-width: 480px;
+}
+.feelback-container .dialog .content,
+.feelback-style .dialog .content {
   padding: 1.5rem;
   border-radius: 6px;
   border: 1px solid #7d8792;
