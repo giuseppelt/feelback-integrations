@@ -27,3 +27,22 @@
 .feelback-container .feelback-btn:nth-child(2).active {
     background-color: rgb(255, 187, 187);
 }
+
+
+
+.feelback-yesno .feelback-q {
+    font-size: 0.9em;
+    padding: 0;
+}
+
+.feelback-yesno svg {
+    width: 16px;
+    height: 16px;
+}
+
+.divider {
+    margin-top: 1rem;
+    height: 0.5px;
+    width: 100%;
+    border: 1px solid #eee;
+}

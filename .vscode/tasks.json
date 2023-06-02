@@ -70,6 +70,20 @@
             "presentation": {
                 "reveal": "never"
             }
+        },
+        {
+            "label": "example nextra",
+            "type": "npm",
+            "script": "dev",
+            "group": "build",
+            "path": "${workspaceFolder}/samples/nextra-docs",
+            "options": {
+                "cwd": "${workspaceFolder}/samples/nextra-docs"
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            }
         }
     ]
 }
