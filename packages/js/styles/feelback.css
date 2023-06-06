@@ -111,6 +111,26 @@
   font-size: 0.9em;
   padding-inline: 0.25em;
 }
+.feelback-radio-item {
+  display: flex;
+  flex-direction: row;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  align-items: flex-start;
+}
+.feelback-radio-item input[type=radio] {
+  flex-shrink: 0;
+  width: unset;
+  display: inline-block;
+  margin: 0.5rem;
+}
+.feelback-radio-item label {
+  cursor: pointer;
+  display: block;
+}
+.feelback-radio-item .feelback-text {
+  font-size: 0.9em;
+}
 .feelback-icon {
   display: flex;
   line-height: 1em;
