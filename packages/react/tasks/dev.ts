@@ -8,7 +8,9 @@ const svgrConfig: Parameters<typeof svgr>[0] = {
 };
 
 await Promise.all([
-    run("pnpm tsc -p tsconfig.dev.json --watch --incremental"),
+    run("pnpm tsc -p tsconfig.dev.json --watch --incremental", {
+        showOutput: true,
+    }),
     (await esbuild.context({
         plugins: [
             svgr(svgrConfig),

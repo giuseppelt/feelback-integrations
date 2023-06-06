@@ -38,6 +38,13 @@
             "options": {
                 "cwd": "${workspaceFolder}/packages/react"
             },
+            "problemMatcher": {
+                "base": "$tsc-watch",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/packages/react"
+                ]
+            },
             "isBackground": true,
             "presentation": {
                 "reveal": "never"
