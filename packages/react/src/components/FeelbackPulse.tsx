@@ -1,10 +1,11 @@
 import type { TargetContent } from "@feelback/js";
+import type { FeelbackValueDefinition } from "../types";
 import { useFeelbackAggregates, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
-import { ButtonValueDef, ButtonValueList } from "../parts";
+import { ButtonValueList } from "../parts";
 
 
 export type FeelbackPulseProps = Readonly<TargetContent & {
-  preset?: readonly ButtonValueDef[]
+  preset?: readonly FeelbackValueDefinition[]
   showCount?: boolean
 }>
 

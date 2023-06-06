@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 
 
-export function useOnClickOutside<T extends HTMLElement = HTMLElement>(isActive: boolean, callback: () => void) {
+export function useOnClickOutside<T extends HTMLElement = HTMLElement>(isActive: boolean, callback?: () => void) {
     const ref = useRef<T>(null);
 
     // handler onClick outside picker
     useEffect(() => {
-        if (isActive) {
+        if (isActive && callback) {
             const handler = (ev: Event) => {
                 if (!ev.target || !ref.current?.contains(ev.target as Node)) {
                     callback();

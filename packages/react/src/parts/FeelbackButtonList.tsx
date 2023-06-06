@@ -1,11 +1,12 @@
 import type { TargetContent } from "@feelback/js";
+import type { FeelbackValueDefinition } from "../types";
 import { useFeelbackAggregates, useTimeout, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
-import { ButtonValueDef, ButtonValueList } from ".";
+import { Answer, Question } from ".";
 
 
 export type FeelbackButtonListProps = Readonly<TargetContent & {
   className?: string
-  preset?: readonly ButtonValueDef[]
+  preset?: readonly FeelbackValueDefinition[]
   showCount?: boolean
   textQuestion?: string
   textAnswer?: string
@@ -49,23 +50,18 @@ export function FeelbackButtonList(props: FeelbackButtonListProps) {
   return (
     <div className={`feelback-container${className ? " " + className : ""}`}>
       {!isAnswerVisible &&
-        <div className="feelback-q">
-          {textQuestion && <span className="feelback-text">{textQuestion}</span>}
-          <ButtonValueList
-            items={preset}
-            showCount={showCount}
-            counts={counts}
-            isDisabled={localValue !== undefined && !isRevokable}
-            active={localValue}
-            onClick={onClick}
-          />
-        </div>
+        <Question text={textQuestion}
+          items={preset}
+          showCount={showCount}
+          counts={counts}
+          isDisabled={localValue !== undefined && !isRevokable}
+          active={localValue}
+          onClick={onClick}
+        />
       }
 
       {isAnswerVisible &&
-        <div className="feelback-a">
-          <span className="feelback-text">{textAnswer}</span>
-        </div>
+        <Answer text={textAnswer} />
       }
     </div>
   );

@@ -1,5 +1,11 @@
 # @feelback/react changelog
 
+## Upcoming
+- feat: new TaggedMessage layouts: radio-button, radio-group-dialog
+- feat: refactored and exposed component parts
+- ref: changed preset format from tuple to object
+- deps: updated @feelback/js to v0.2.2
+
 ## 0.2.1 Patch release
 - fix: click outside dialog now closes it
 - ref: common useOnClickOutside hook for picker and dialog

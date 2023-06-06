@@ -1,30 +1,43 @@
-import { ReactElement, cloneElement, forwardRef, useState } from "react";
+import { ReactElement, cloneElement, forwardRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { TargetContent } from "@feelback/js";
 import { useSendFeelback, useOnClickOutside } from "../hooks";
-import { FormHandlerProps } from ".";
+import { mergeCallback } from "./utils";
+import { Answer, FormHandlerProps } from ".";
 
 
-export type FeelbackButtonFormProps = Readonly<TargetContent & {
+
+export type FeelbackLayoutProps<T> = Readonly<TargetContent & {
   className?: string
-  layout?: "button-switch" | "button-dialog" | "inline"
+  layout?: "button-switch" | "button-dialog" | "inline" | "radio-group" | "radio-group-dialog"
   label?: string
   textAnswer?: string
-  children: ReactElement<FormHandlerProps<any>>
+  onClose?: () => void
+  onSuccess?: () => void
+  children: ReactElement<FormHandlerProps<T>>
 }>
 
-export const FeelbackButtonForm = forwardRef<HTMLDivElement, FeelbackButtonFormProps>((props, ref) => {
+export const FeelbackLayout = forwardRef<HTMLDivElement, FeelbackLayoutProps<any>>((props, ref) => {
   const {
     className,
     layout,
     label = "Send feedback",
     textAnswer = "Thanks for your feedback",
+    onClose,
+    onSuccess,
     children: Form,
     ...content
   } = props;
 
 
-  const { call: send, isSuccess } = useSendFeelback(content);
+  const { call: onSubmit, isSuccess } = useSendFeelback(content);
+
+  useEffect(() => {
+    if (isSuccess) {
+      onSuccess?.();
+    }
+  }, [isSuccess]);
+
 
   return (
     <div ref={ref} className={`feelback-container${className ? " " + className : ""}`}>
@@ -33,7 +46,7 @@ export const FeelbackButtonForm = forwardRef<HTMLDivElement, FeelbackButtonFormP
           case "button-switch":
             return (
               <OpenButton label={label} behavior="remove-when-open">
-                {onClose => cloneElement(Form, { onSubmit: send, onCancel: onClose })}
+                {onClose => cloneElement(Form, { onSubmit, onCancel: onClose })}
               </OpenButton>
             );
 
@@ -42,22 +55,29 @@ export const FeelbackButtonForm = forwardRef<HTMLDivElement, FeelbackButtonFormP
               <OpenButton label={label} behavior="disable-when-open">
                 {onClose => (
                   <Dialog onClose={onClose}>
-                    {cloneElement(Form, { onSubmit: send, onCancel: onClose })}
+                    {cloneElement(Form, { onSubmit, onCancel: onClose })}
                   </Dialog>
                 )}
               </OpenButton>
             );
 
+          case "radio-group-dialog":
+            return (
+              <Dialog onClose={onClose}>
+                {cloneElement(Form, { onSubmit, onCancel: mergeCallback(Form.props.onCancel, onClose) })}
+              </Dialog>
+            );
+
+
           case "inline":
+          case "radio-group":
           default:
-            return cloneElement(Form, { onSubmit: send })
+            return cloneElement(Form, { onSubmit })
         }
       })()}
 
       {isSuccess &&
-        <div className="feelback-a">
-          <span className="feelback-text">{textAnswer}</span>
-        </div>
+        <Answer text={textAnswer} />
       }
     </div>
   );
@@ -98,7 +118,7 @@ function OpenButton(props: OpenButtonProps) {
 
 
 type DialogProps = Readonly<{
-  onClose: () => void
+  onClose?: () => void
   children: ReactElement
 }>
 

@@ -1,6 +1,6 @@
 import { forwardRef, useRef } from "react";
 import { TargetContent } from "@feelback/js";
-import { FeelbackButtonForm, Form, FormHandlerProps } from "../parts";
+import { FeelbackLayout, Form, FormHandlerProps } from "../parts";
 
 
 export type FeelbackMessageProps = Readonly<TargetContent & {
@@ -28,9 +28,9 @@ export function FeelbackMessage(props: FeelbackMessageProps) {
 
 
   return (
-    <FeelbackButtonForm className={`feelback-message layout-${layout}`} {...{ layout, label, ...content }}>
+    <FeelbackLayout className={`feelback-message layout-${layout}`} {...{ layout, label, ...content }}>
       <MessageForm {...{ title, placeholder, minLength, maxLength }} />
-    </FeelbackButtonForm>
+    </FeelbackLayout>
   )
 }
 

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import type { TargetContent } from "@feelback/js";
+import type { FeelbackValueDefinition } from "../types";
 import { useFeelbackAggregates, useOnClickOutside, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
-import { ButtonValueDef, ButtonValueList, FeelbackButtonList } from "../parts";
+import { ButtonValueList, FeelbackButtonList, Question } from "../parts";
 import IconHappy from "@feelback/js/icons/icon-happy.svg";
 
 
 export type FeelbackReactionProps = Readonly<TargetContent & {
   layout?: "list" | "picker"
-  preset?: readonly ButtonValueDef[]
+  preset?: readonly FeelbackValueDefinition[]
   showCount?: boolean
   textQuestion?: string
   textAnswer?: string
@@ -63,24 +64,25 @@ function PickerLayout(props: FeelbackReactionProps) {
 
   return (
     <div className="feelback-container feelback-reaction layout-picker">
-      <div className="feelback-q">
-        <button className="feelback-btn btn-reaction-picker" style={isOpen ? { visibility: "hidden" } : undefined} onClick={() => setOpen(true)}>
-          <span className="feelback-icon"><IconHappy /></span>
-        </button>
-        <div ref={pickerRef} className="popup" style={isOpen ? { display: "block", top: "0" } : undefined}>
-          <ButtonValueList items={preset} onClick={onClickReaction} />
-        </div>
-
-        <ButtonValueList
-          items={preset}
-          hideZero
-          showCount={showCount}
-          counts={counts}
-          isDisabled={isOpen || (localValue !== undefined && !isRevokable)}
-          active={localValue}
-          onClick={onClickReaction}
-        />
-      </div>
+      <Question
+        text={
+          <>
+            <button className="feelback-btn btn-reaction-picker" style={isOpen ? { visibility: "hidden" } : undefined} onClick={() => setOpen(true)}>
+              <span className="feelback-icon"><IconHappy /></span>
+            </button>
+            <div ref={pickerRef} className="popup" style={isOpen ? { display: "block", top: "0" } : undefined}>
+              <ButtonValueList items={preset} onClick={onClickReaction} />
+            </div>
+          </>
+        }
+        items={preset}
+        hideZero
+        showCount={showCount}
+        counts={counts}
+        isDisabled={isOpen || (localValue !== undefined && !isRevokable)}
+        active={localValue}
+        onClick={onClickReaction}
+      />
     </div>
   );
 }

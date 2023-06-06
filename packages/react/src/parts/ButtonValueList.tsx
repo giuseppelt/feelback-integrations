@@ -1,7 +1,6 @@
-import { ButtonIcon, ButtonValue } from ".";
+import { FeelbackValueDefinition } from "../types";
+import { ButtonValue } from ".";
 
-
-export type ButtonValueDef = readonly [value: string, icon: ButtonIcon | readonly [ButtonIcon, ButtonIcon], title: string | undefined]
 
 export type ButtonValueListProps = Readonly<{
   active?: unknown
@@ -11,7 +10,7 @@ export type ButtonValueListProps = Readonly<{
   showCount?: boolean
   showLabels?: boolean
   isDisabled?: boolean
-  items: readonly ButtonValueDef[]
+  items: readonly FeelbackValueDefinition[]
   counts?: readonly number[]
   onClick?: (value: string) => void
 }>
@@ -19,9 +18,9 @@ export type ButtonValueListProps = Readonly<{
 export function ButtonValueList(props: ButtonValueListProps) {
   const {
     active,
-    showTitle = true,
     showCount = false,
     showLabels = false,
+    showTitle = !showLabels,
     hideZero = false,
     hideZeroCount = true,
     isDisabled = false,
@@ -32,7 +31,7 @@ export function ButtonValueList(props: ButtonValueListProps) {
 
   return (
     <div className={`feelback-buttons${showCount && items.length > 1 ? " with-count" : ""}`}>
-      {items.map(([value, icon, title], idx) => {
+      {items.map(({ value, icon, title }, idx) => {
         // if a value is active, force it to 1
         // even if count is 0, 
         const count = counts?.[idx] || (active === value ? 1 : 0);

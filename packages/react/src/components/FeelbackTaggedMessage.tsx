@@ -1,44 +1,66 @@
 import { forwardRef, useRef, useState } from "react";
 import { TargetContent } from "@feelback/js";
-import { ButtonValueDef, ButtonValueList, FeelbackButtonForm, Form, FormHandlerProps } from "../parts";
+import { ButtonValueList, FeelbackLayout, Form, FormHandlerProps, RadioValueList } from "../parts";
+import { FeelbackValueDefinition } from "../types";
 
 
 export type FeelbackTaggedMessageProps = Readonly<TargetContent & {
-  layout?: "button-switch" | "button-dialog" | "inline"
+  layout?: "button-switch" | "button-dialog" | "inline" | "radio-group" | "radio-group-dialog"
   label?: string
   textAnswer?: string
-}> & Pick<TaggedMessageFormProps,
+  preset?: readonly FeelbackValueDefinition[]
+  onSuccess?: () => void
+}> & Partial<Pick<TaggedMessageFormProps,
   | "title"
-  | "preset"
+  | "tags"
+  | "active"
   | "maxLength"
   | "minLength"
   | "placeholder"
->
+  | "showLabels"
+  | "onCancel"
+>>
 
 export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
   const {
     layout = "button-switch",
     label = "Send feedback",
     preset,
+    tags = preset,
+    active,
     title,
     placeholder,
     minLength,
     maxLength,
     textAnswer = "Thanks for your feedback",
+    showLabels,
+    onCancel,
+    onSuccess,
     ...content
   } = props;
 
+  if (!tags) {
+    console.warn("Missing tags");
+    return null;
+  }
 
   return (
-    <FeelbackButtonForm className={`feelback-tagged-message layout-${layout}`} {...{ layout, label, ...content }}>
-      <TaggedMessageForm {...{ title, preset, placeholder, minLength, maxLength }} />
-    </FeelbackButtonForm>
-  )
+    <FeelbackLayout className={`feelback-tagged-message layout-${layout}`}
+      {...{ layout, label, onSuccess, ...content }}
+    >
+      <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, onCancel }}
+        layout={layout === "radio-group" || layout === "radio-group-dialog" ? "radio-group" : "form"}
+      />
+    </FeelbackLayout>
+  );
 }
 
 
-type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message: string }> & Readonly<{
-  preset: readonly ButtonValueDef[]
+type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message?: string }> & Readonly<{
+  layout: "form" | "radio-group"
+  tags: readonly FeelbackValueDefinition[]
+  active?: "$auto" | (string & {})
+  showLabels?: boolean
   title?: string
   minLength?: number
   maxLength?: number
@@ -47,8 +69,11 @@ type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message: string }>
 
 const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) => {
   const {
+    layout,
     title = "Send feedback",
-    preset,
+    active,
+    tags,
+    showLabels = true,
     placeholder = "Type your message",
     minLength,
     maxLength,
@@ -57,12 +82,15 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
   } = props;
 
 
+  const isMessageRequired = !!minLength && minLength > 0;
   const messageRef = useRef<HTMLTextAreaElement>(null);
-  const [tag, setTag] = useState(preset[0][0]);
+  const [tag, setTag] = useState(active === "$auto" ? tags[0].value : active);
 
   const onValidate = () => {
     const message = messageRef.current?.value.trim() || undefined;
-    if (!message || !tag) return;
+
+    if (!tag) return;
+    if (isMessageRequired && (!message || message.length < minLength)) return;
 
     return {
       tag,
@@ -70,15 +98,41 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
     };
   }
 
+
   return (
-    <Form {...{ title, onCancel, onSubmit, ref }} onValidate={onValidate}>
-      <ButtonValueList items={preset} showLabels active={tag} onClick={setTag} />
-      <textarea ref={messageRef}
-        required
-        placeholder={placeholder}
-        minLength={minLength}
-        maxLength={maxLength}
-      />
+    <Form {...{ title, onCancel, onSubmit, ref }}
+      onValidate={onValidate}
+      alignButton={layout === "radio-group" ? "left" : "right"}
+    >
+
+      {layout === "form" &&
+        <>
+          <ButtonValueList items={tags} showLabels={showLabels} active={tag} onClick={setTag} />
+          <textarea ref={messageRef}
+            required={isMessageRequired}
+            placeholder={placeholder}
+            minLength={minLength}
+            maxLength={maxLength}
+          />
+        </>
+      }
+
+      {layout === "radio-group" &&
+        <>
+          <RadioValueList items={tags} active={tag} onSelected={setTag}
+            onRenderAddon={({ isSelected }) => {
+              return isSelected && (
+                <textarea ref={messageRef}
+                  required={isMessageRequired}
+                  placeholder={placeholder}
+                  minLength={minLength}
+                  maxLength={maxLength}
+                />
+              );
+            }}
+          />
+        </>
+      }
     </Form>
   );
 });
