@@ -1,5 +1,9 @@
 # @feelback/js changelog
 
+## 0.2.2 Patch release
+- fix: from styling
+- feat: new radio-based component style
+
 ## 0.2.1 Patch release
 - fix: dialog style
 

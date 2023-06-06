@@ -1,6 +1,6 @@
 # @feelback/react changelog
 
-## Upcoming
+## 0.2.2 Patch release
 - feat: new TaggedMessage layouts: radio-button, radio-group-dialog
 - feat: refactored and exposed component parts
 - ref: changed preset format from tuple to object
