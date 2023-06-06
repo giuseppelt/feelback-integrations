@@ -22,18 +22,11 @@
     textarea {
         height: 120px;
         width: 100%;
+        padding: .5rem;
     }
 
     input {
         width: 100%;
-    }
-
-    .feelback-form {
-        .content {
-            display: flex;
-            flex-direction: column;
-            gap: .3rem;
-        }
     }
 
     .popup {
@@ -84,6 +77,19 @@
     line-height: 32px;
 }
 
+.feelback-form {
+    &>.content {
+        display: flex;
+        flex-direction: column;
+        gap: .3rem;
+    }
+
+    .form-title {
+        font-size: 1.10em;
+        font-weight: bold;
+    }
+}
+
 .feelback-buttons {
     gap: 2px;
     display: flex;
@@ -106,7 +112,7 @@
     }
 
     &.align-end {
-        justify-content: flex-end;
+        flex-direction: row-reverse;
     }
 
     &.large {
