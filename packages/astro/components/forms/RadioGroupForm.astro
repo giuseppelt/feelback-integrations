@@ -1,0 +1,46 @@
+---
+import Form from "../parts/Form.astro";
+import FieldLongText from "../parts/FieldLongText.astro";
+import { FeelbackValueDefinition } from "../../src/types";
+
+interface Props {
+  items: readonly FeelbackValueDefinition<string>[];
+  class?: string;
+  title?: string;
+  placeholder?: string;
+  minLength?: number;
+  maxLength?: number;
+  withMessage?: boolean;
+}
+
+const {
+  items,
+  class: className,
+  title = "Send feedback",
+  placeholder = "Type your message",
+  minLength,
+  maxLength,
+  withMessage,
+} = Astro.props;
+
+const group = `group-${Math.random().toString().substring(2, 7)}`;
+---
+
+<Form class={className} title={title} alignButton="left">
+  <fieldset class="feelback-radio-group">
+    {
+      items.map(({ value, title, description }) => (
+        <div class="feelback-radio-item-wrap">
+          <div class="feelback-radio-item">
+            <input id={`${group}-${value}`} name="tag" type="radio" value={value} data-feelback-field />
+            <div class="feelback-radio-side">
+              {title && <label for={`${group}-${value}`}>{title}</label>}
+              {description && <span class="feelback-text">{description}</span>}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </fieldset>
+  {withMessage && <FieldLongText name="message" {...{ placeholder, minLength, maxLength }} />}
+</Form>

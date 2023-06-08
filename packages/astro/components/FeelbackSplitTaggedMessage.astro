@@ -1,0 +1,99 @@
+---
+import type { TargetContent } from "../src";
+import Component from "./parts/Component.astro";
+import SwitchResult from "./parts/SwitchResult.astro";
+import iconLike from "@feelback/js/icons/icon-like.svg?raw";
+import iconDislike from "@feelback/js/icons/icon-dislike.svg?raw";
+import RadioGroupForm from "./forms/RadioGroupForm.astro";
+import { getTarget } from "./utils";
+import { FeelbackValueDefinition } from "../src/types";
+
+type Props = TargetContent & {
+  tags: Record<string, FeelbackValueDefinition<string>[]>;
+  titles?: Record<string, string>;
+  textQuestion?: string;
+  textAnswer?: string;
+  placeholder?: string;
+  minLength?: number;
+  maxLength?: number;
+  withMessage?: boolean;
+};
+
+const {
+  textQuestion = "Was this page useful?",
+  textAnswer = "Thanks for your feedback",
+  withMessage,
+  titles,
+  minLength,
+  maxLength,
+  placeholder = `${!minLength || minLength < 1 ? "(optional) " : ""}Please give us details`,
+  tags = [],
+  ...target
+} = Astro.props;
+
+const formAttrs = {
+  placeholder,
+  minLength,
+  maxLength,
+  withMessage,
+};
+
+const items = [
+  {
+    icon: iconLike,
+    title: "Yes",
+    value: "y",
+    attrs: {
+      "data-behavior-action": "switch",
+      "data-behavior-source": ".feelback-q",
+      "data-behavior-target": ".feelback-form-y",
+    },
+  },
+  {
+    icon: iconDislike,
+    title: "No",
+    value: "n",
+    attrs: {
+      "data-behavior-action": "switch",
+      "data-behavior-source": ".feelback-q",
+      "data-behavior-target": ".feelback-form-n",
+    },
+  },
+];
+---
+
+<Component
+  component="form"
+  class={`feelback-tagged-message layout-radio-group`}
+  behavior="switch"
+  {...getTarget(target)}
+>
+  <SwitchResult textAnswer={textAnswer}>
+    <div class="feelback-q">
+      {textQuestion && <span class="feelback-text">{textQuestion}</span>}
+      <div class="feelback-buttons">
+        {
+          items.map(({ title, icon, attrs }) => (
+            <button class="feelback-btn" {...attrs}>
+              <span class="feelback-icon" set:html={icon} />
+              <span class="label">{title}</span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    {
+      Object.entries(tags).map(([value, items]) => {
+        return (
+          <RadioGroupForm
+            items={items}
+            title={titles?.[value]}
+            class={`hidden feelback-form-${value}`}
+            {...formAttrs}
+          />
+        );
+      })
+    }
+  </SwitchResult>
+</Component>
