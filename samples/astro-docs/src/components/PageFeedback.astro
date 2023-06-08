@@ -1,0 +1,43 @@
+---
+import type { FeelbackValueDefinition } from "astro-feelback";
+import FeelbackSplitTaggedMessage from "astro-feelback/components/FeelbackSplitTaggedMessage.astro";
+
+const YES_TAGS: FeelbackValueDefinition[] = [
+  { value: "accurate", title: "Accurate", description: "Accurately describes the product or feature." },
+  { value: "problem-solved", title: "Solved my problem", description: "Helped me resolve an issue." },
+  { value: "clear", title: "Easy to understand", description: "Easy to follow and comprehend." },
+  {
+    value: "product-chosen",
+    title: "Helped me decide to use the product",
+    description: "Convinced me to adopt the product or feature.",
+  },
+  { value: "yes-other", title: "Another reason" },
+];
+
+const NO_TAGS: FeelbackValueDefinition[] = [
+  { value: "inaccurate", title: "Inaccurate", description: "Doesn't accurately describe the product or feature." },
+  {
+    value: "missing-info",
+    title: "Couldn't find what I was looking for",
+    description: "Missing important information.",
+  },
+  { value: "unclear", title: "Hard to understand", description: "Too complicated or unclear." },
+  { value: "bad-examples", title: "Code samples errors", description: "One or more code samples are incorrect." },
+  { value: "no-other", title: "Another reason" },
+];
+
+const CONTENT_SET_ID = "bffb3688-6489-408d-8d5e-52bb675609bc";
+---
+
+<FeelbackSplitTaggedMessage
+  contentSetId={CONTENT_SET_ID}
+  withMessage
+  titles={{
+    y: "What did you like?",
+    n: "What we should improve?",
+  }}
+  tags={{
+    y: YES_TAGS,
+    n: NO_TAGS,
+  }}
+/>
