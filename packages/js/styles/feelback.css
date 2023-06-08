@@ -111,6 +111,10 @@
   font-size: 0.9em;
   padding-inline: 0.25em;
 }
+.feelback-radio-group {
+  padding: 0;
+  border: none;
+}
 .feelback-radio-item {
   display: flex;
   flex-direction: row;
