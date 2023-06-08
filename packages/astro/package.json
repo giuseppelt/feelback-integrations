@@ -3,6 +3,7 @@
     "version": "0.2.0",
     "description": "Use Feelback service within your Astro website",
     "type": "module",
+    "types": "./dist/index.d.ts",
     "exports": {
         ".": "./dist/index.js",
         "./client": "./dist/client.js",
