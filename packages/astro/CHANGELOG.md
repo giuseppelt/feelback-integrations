@@ -1,5 +1,10 @@
 # astro-feelback changelog
 
+## 0.2.3 Patch release
+- feat: new FeelbackSplitTaggedMessage component
+- fix: update package types
+- deps: updated @feelback/js to v0.2.3
+
 ## 0.2.0 Major release
 - feat: added FeelbackMessage and FeelbackTaggedMessage components
 - feat: style improvements with per-component styling possible

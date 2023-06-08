@@ -1,6 +1,6 @@
 {
     "name": "astro-feelback",
-    "version": "0.2.0",
+    "version": "0.2.3",
     "description": "Use Feelback service within your Astro website",
     "type": "module",
     "types": "./dist/index.d.ts",

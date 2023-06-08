@@ -1,7 +1,12 @@
 # @feelback/js changelog
 
+## 0.2.3 Patch release
+- feat: allow multi form setup initialization
+- fix: radio-group styling
+- fix: manage radio input in form value extraction
+
 ## 0.2.2 Patch release
-- fix: from styling
+- fix: form styling
 - feat: new radio-based component style
 
 ## 0.2.1 Patch release

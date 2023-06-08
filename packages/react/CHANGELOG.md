@@ -1,5 +1,8 @@
 # @feelback/react changelog
 
+## 0.2.3 Patch release
+- deps: updated @feelback/js to v0.2.3
+
 ## 0.2.2 Patch release
 - feat: new TaggedMessage layouts: radio-button, radio-group-dialog
 - feat: refactored and exposed component parts
