@@ -1,5 +1,6 @@
 {
     "name": "@feelback/react",
+    "description": "Use Feelback service within your React website",
     "version": "0.2.3",
     "type": "module",
     "types": "./dist/index.d.ts",
@@ -23,12 +24,21 @@
         "url": "https://github.com/giuseppelt"
     },
     "license": "MIT",
-    "homepage": "https://github.com/giuseppelt/feelback-integrations#readme.md",
+    "homepage": "https://www.feelback.dev",
     "bugs": "https://github.com/giuseppelt/feelback-integrations/issues",
     "repository": {
         "type": "git",
         "url": "https://github.com/giuseppelt/feelback-integrations.git"
     },
+    "keywords": [
+        "react",
+        "analytics",
+        "ui",
+        "feedback",
+        "feelback",
+        "reactions",
+        "emoji"
+    ],
     "files": [
         "dist",
         "styles",

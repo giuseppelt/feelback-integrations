@@ -32,14 +32,18 @@
     },
     "keywords": [
         "feelback",
-        "feedback"
+        "feedback",
+        "analytics",
+        "ui",
+        "emoji",
+        "reactions"
     ],
     "author": {
         "name": "Giuseppe La Torre",
         "url": "https://github.com/giuseppelt"
     },
     "license": "MIT",
-    "homepage": "https://github.com/giuseppelt/feelback-integrations#readme.md",
+    "homepage": "https://www.feelback.dev",
     "bugs": "https://github.com/giuseppelt/feelback-integrations/issues",
     "repository": {
         "type": "git",
