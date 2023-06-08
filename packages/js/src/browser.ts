@@ -122,26 +122,28 @@ export function setupFeelback(config?: FeelbackConfig) {
     }
 
     function setupComponentForm(container: HTMLElement, target: TargetContent, params: FeelbackContainerConfig) {
-        const form = qs(container, ".feelback-form");
-        if (!form) return;
+        const forms = qsa(container, ".feelback-form");
+        if (!forms) return;
 
-        form.addEventListener("submit", ev => {
-            ev.preventDefault();
-            ev.stopPropagation();
+        forms.forEach(form => {
+            form.addEventListener("submit", ev => {
+                ev.preventDefault();
+                ev.stopPropagation();
 
-            const value = getFormValue(form);
-            if (!value) return;
+                const value = getFormValue(form);
+                if (!value) return;
 
-            sendFeelback({ endpoint, ...target, value }).then(
-                () => {
-                    BH.switch.run({ container });
-                    if (params.behavior === "dialog") {
-                        BH.dialog.closeActive?.();
-                    }
-                },
-                err => {
-                    error("Cannot send feelback", err);
-                });
+                sendFeelback({ endpoint, ...target, value }).then(
+                    () => {
+                        BH.switch.run({ container });
+                        if (params.behavior === "dialog") {
+                            BH.dialog.closeActive?.();
+                        }
+                    },
+                    err => {
+                        error("Cannot send feelback", err);
+                    });
+            });
         });
     }
 
