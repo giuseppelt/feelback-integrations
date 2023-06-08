@@ -453,13 +453,7 @@ function getFormValue(form: HTMLElement): any {
     }
 
     const fields = [...qsa(form, "[data-feelback-field]")];
-    const value = fields.reduce((r, f) => {
-        const name = f.getAttribute("data-feelback-field") || (f as any).name;
-        if (name) {
-            r[name] = getFieldValue(f);
-        }
-        return r;
-    }, {} as any);
+    const value = fields.reduce((r, f) => ({ ...r, ...getFieldValue(f) }), {});
 
     if (Object.keys(value).length === 0) {
         return;
@@ -469,17 +463,28 @@ function getFormValue(form: HTMLElement): any {
 }
 
 function getFieldValue(el: HTMLElement) {
-    if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
-        return (el as HTMLInputElement).value;
+    const name = el.getAttribute("data-feelback-field") || (el as any).name;
+    if (!name) return;
+
+    if (el.tagName === "INPUT") {
+        const input = el as HTMLInputElement;
+        if (input.type === "radio" && !input.checked) return;
+        return { [name]: input.value };
+    }
+
+    if (el.tagName === "TEXTAREA") {
+        const value = (el as HTMLTextAreaElement).value.trim() || undefined;
+        if (!value) return;
+        return { [name]: value };
     }
 
     const type = el.getAttribute("data-feelback-type");
     if (type === "button-group") {
-        return qs(el, "button.active")?.getAttribute("data-feelback-value");
+        return { [name]: qs(el, "button.active")?.getAttribute("data-feelback-value") };
     }
 
     const value = el.getAttribute("data-feelback-value");
     if (value) {
-        return value;
+        return { [name]: value };
     }
 }
