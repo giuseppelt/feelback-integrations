@@ -70,6 +70,10 @@
     padding-inline: 0.4em;
     gap: 1.2em;
     align-items: center;
+
+    @media (max-width:768px) {
+        justify-content: space-between;
+    }
 }
 
 .feelback-a {
@@ -129,6 +133,7 @@
 
 .feelback-radio-group {
     padding: 0;
+    margin: 0;
     border: none;
 }
 

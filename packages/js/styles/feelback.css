@@ -73,6 +73,11 @@
   gap: 1.2em;
   align-items: center;
 }
+@media (max-width: 768px) {
+  .feelback-q {
+    justify-content: space-between;
+  }
+}
 .feelback-a {
   padding-inline: 0.4em;
   line-height: 32px;
@@ -113,6 +118,7 @@
 }
 .feelback-radio-group {
   padding: 0;
+  margin: 0;
   border: none;
 }
 .feelback-radio-item {
