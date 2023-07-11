@@ -2,6 +2,7 @@
 import { CollectionEntry, getCollection } from "astro:content";
 import MainLayout from "../layouts/MainLayout.astro";
 import PageFeedback from "../components/PageFeedback.astro";
+import PageFeedbackEmoji from "../components/PageFeedbackEmoji.astro";
 
 export async function getStaticPaths() {
   const docs = await getCollection("docs");
@@ -22,4 +23,6 @@ const { Content, headings } = await post.render();
   <Content />
   <hr />
   <PageFeedback />
+  <hr style="margin: 1.25rem 0;" />
+  <PageFeedbackEmoji />
 </MainLayout>

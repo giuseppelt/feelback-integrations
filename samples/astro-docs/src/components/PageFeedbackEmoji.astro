@@ -1,0 +1,16 @@
+---
+import FeelbackTaggedMessage from "astro-feelback/components/FeelbackTaggedMessage.astro";
+
+const CONTENT_SET_ID = "bffb3688-6489-408d-8d5e-52bb675609bc";
+---
+
+<FeelbackTaggedMessage
+  contentSetId={CONTENT_SET_ID}
+  title="Was this helpful?"
+  placeholder={"Type your details... (optional)"}
+  preset="evaluation"
+  layout="reveal-message"
+  style={["align-center", "bordered", "width-sm"]}
+  showLabels={false}
+  preselect={false}
+/>
