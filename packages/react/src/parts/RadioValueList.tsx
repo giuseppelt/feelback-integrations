@@ -1,5 +1,6 @@
-import { ReactElement, useId } from "react";
-import { FeelbackValueDefinition } from "../types";
+import type { ReactElement } from "react";
+import type { FeelbackValueDefinition } from "../types";
+import { useId } from "../hooks";
 import { RadioValue } from ".";
 
 
