@@ -20,8 +20,8 @@ const {
     {title && <span class="feelback-text form-title">{title}</span>}
     <slot />
     <div class={`form-buttons feelback-buttons${alignButton === "right" ? " align-end" : ""}`}>
-      <slot name="btn-cancel" />
       <button class="feelback-btn btn-action" title="Send message" type="submit">Send</button>
+      <slot name="btn-cancel" />
     </div>
   </div>
 </form>

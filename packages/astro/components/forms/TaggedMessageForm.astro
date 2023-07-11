@@ -32,4 +32,5 @@ const {
 <Form class={className} title={title}>
   <FieldButtonValueList name="tag" value={preselect === false ? undefined : preselect} {...{ preset, showLabels }} />
   <FieldLongText name="message" {...{ placeholder, minLength, maxLength }} />
+  <slot name="btn-cancel" slot="btn-cancel" />
 </Form>
