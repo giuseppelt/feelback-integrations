@@ -2,11 +2,12 @@
 import type { ButtonItem } from "../parts/ButtonValueList.astro";
 import Form from "../parts/Form.astro";
 import FieldLongText from "../parts/FieldLongText.astro";
-import FieldButtonValueList from "../parts/FieldButtonValueList.astro";
+import FieldButtonValueList, { Props as ButtonListProps } from "../parts/FieldButtonValueList.astro";
 
 export type PresetName = "feeling" | "like-dislike" | "feedback" | "evaluation";
 
 interface Props {
+  layout?: "inline" | "reveal";
   preset: PresetName | readonly ButtonItem[];
   class?: string;
   title?: string;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const {
+  layout = "inline",
   class: className,
   preset,
   title = "Send feedback",
@@ -27,10 +29,31 @@ const {
   showLabels = true,
   preselect = 0,
 } = Astro.props;
+
+const buttonListProps: ButtonListProps = {
+  name: "tag",
+  value: preselect === false ? undefined : preselect,
+  preset,
+  showLabels,
+};
 ---
 
-<Form class={className} title={title}>
-  <FieldButtonValueList name="tag" value={preselect === false ? undefined : preselect} {...{ preset, showLabels }} />
-  <FieldLongText name="message" {...{ placeholder, minLength, maxLength }} />
+<Form class={className} title={layout === "reveal" ? undefined : title} revealButtons={layout === "reveal"}>
+  {
+    layout === "reveal" ? (
+      <div class="feelback-q">
+        {title && <span class="feelback-text">{title}</span>}
+        <FieldButtonValueList {...buttonListProps} reveal=".form-reveal" />
+      </div>
+    ) : (
+      <FieldButtonValueList {...buttonListProps} />
+    )
+  }
+
+  <FieldLongText
+    class={layout === "reveal" ? "hidden form-reveal" : undefined}
+    name="message"
+    {...{ placeholder, minLength, maxLength }}
+  />
   <slot name="btn-cancel" slot="btn-cancel" />
 </Form>

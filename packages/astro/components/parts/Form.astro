@@ -4,6 +4,7 @@ interface Props {
   class?: string;
   title?: string;
   alignButton?: "left" | "right";
+  revealButtons?: boolean;
 }
 
 const {
@@ -11,15 +12,20 @@ const {
   class: className,
   title,
   alignButton = "right",
+  revealButtons,
   /** */
 } = Astro.props;
 ---
 
-<form class={`feelback-form ${className}`} data-feelback-type={singleValue ? "form-single" : undefined}>
+<form class={`feelback-form ${className || ""}`} data-feelback-type={singleValue ? "form-single" : undefined}>
   <div class="content">
     {title && <span class="feelback-text form-title">{title}</span>}
     <slot />
-    <div class={`form-buttons feelback-buttons${alignButton === "right" ? " align-end" : ""}`}>
+    <div
+      class={`form-buttons feelback-buttons${alignButton === "right" ? " align-end" : ""}${
+        revealButtons ? " hidden form-reveal" : ""
+      }`}
+    >
       <button class="feelback-btn btn-action" title="Send message" type="submit">Send</button>
       <slot name="btn-cancel" />
     </div>

@@ -1,11 +1,12 @@
 ---
 import ButtonValueList, { ButtonItem, PresetName } from "./ButtonValueList.astro";
 
-interface Props {
+export interface Props {
   name: string;
   preset: PresetName | readonly ButtonItem[];
   class?: string;
   showLabels?: boolean;
+  reveal?: string;
   value?: string | number;
 }
 
@@ -14,9 +15,17 @@ const {
   preset: items,
   class: className,
   showLabels,
+  reveal,
   value,
   /** */
 } = Astro.props;
 ---
 
-<ButtonValueList field={name} action="set-field" class={className} active={value} showLabel={showLabels} {...{items}} />
+<ButtonValueList
+  field={name}
+  action="set-field"
+  class={className}
+  active={value}
+  showLabel={showLabels}
+  {...{ items, reveal }}
+/>
