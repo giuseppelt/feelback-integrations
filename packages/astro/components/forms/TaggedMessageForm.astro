@@ -11,8 +11,10 @@ interface Props {
   class?: string;
   title?: string;
   placeholder?: string;
+  showLabels?: boolean;
   minLength?: number;
   maxLength?: number;
+  preselect?: number | string | false;
 }
 
 const {
@@ -22,10 +24,12 @@ const {
   placeholder = "Type your message",
   minLength,
   maxLength,
+  showLabels = true,
+  preselect = 0,
 } = Astro.props;
 ---
 
 <Form class={className} title={title}>
-  <FieldButtonValueList name="tag" value={0} showLabels {...{preset}} />
-  <FieldLongText name="message" {...{placeholder, minLength, maxLength}} />
+  <FieldButtonValueList name="tag" value={preselect === false ? undefined : preselect} {...{ preset, showLabels }} />
+  <FieldLongText name="message" {...{ placeholder, minLength, maxLength }} />
 </Form>

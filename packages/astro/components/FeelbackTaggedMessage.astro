@@ -11,10 +11,12 @@ type Props = TargetContent & {
   preset?: PresetName;
   title?: string;
   label?: string;
+  showLabels?: boolean;
   minLength?: number;
   maxLength?: number;
   textAnswer?: string;
   placeholder?: string;
+  preselect?: string | number | boolean;
 };
 
 const {
@@ -26,6 +28,8 @@ const {
   preset = "feedback",
   minLength,
   maxLength,
+  showLabels,
+  preselect,
   ...target
 } = Astro.props;
 
@@ -37,6 +41,8 @@ const formAttrs = {
   placeholder,
   minLength,
   maxLength,
+  showLabels,
+  preselect: preselect === true ? undefined : preselect,
 };
 
 const btnCancelAttrs =
