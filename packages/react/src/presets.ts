@@ -13,6 +13,8 @@ import IconArrowDown from "@feelback/js/icons/icon-arrow-down.svg";
 import IconHappy from "@feelback/js/icons/icon-happy.svg";
 import IconNeutral from "@feelback/js/icons/icon-neutral.svg";
 import IconSad from "@feelback/js/icons/icon-sad.svg";
+import IconCry from "@feelback/js/icons/icon-cry.svg";
+import IconLove from "@feelback/js/icons/icon-love.svg";
 
 
 export const PRESET_PULSE_HEART: FeelbackValueDefinition[] = [
@@ -184,6 +186,29 @@ export const PRESET_FEELING: FeelbackValueDefinition[] = [
         value: "sad",
         icon: IconSad,
         title: "Sad",
+    },
+];
+
+export const PRESET_EVALUATION: FeelbackValueDefinition[] = [
+    {
+        value: "love",
+        icon: IconLove,
+        title: "Love it",
+    },
+    {
+        value: "happy",
+        icon: IconHappy,
+        title: "It's Ok",
+    },
+    {
+        value: "sad",
+        icon: IconSad,
+        title: "Not so great",
+    },
+    {
+        value: "hate",
+        icon: IconCry,
+        title: "Hate it",
     },
 ];
 
