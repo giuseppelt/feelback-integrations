@@ -33,7 +33,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     minLength,
     maxLength,
     textAnswer = "Thanks for your feedback",
-    showLabels,
+    showLabels = false,
     onCancel,
     onSuccess,
     ...content
