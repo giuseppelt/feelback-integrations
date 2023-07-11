@@ -1,5 +1,5 @@
 import { DocsThemeConfig } from "nextra-theme-docs";
-import { FeelbackTaggedMessage, PRESET_FEELING, PRESET_FEEDBACK } from "@feelback/react";
+import { FeelbackTaggedMessage, PRESET_FEELING, PRESET_FEEDBACK, PRESET_EVALUATION } from "@feelback/react";
 import { FeelbackYesNo, PRESET_LIKE_DISLIKE } from "@feelback/react";
 import { FeedbackStripeLike } from "./components/FeedbackStripeLike";
 import "@feelback/react/styles/feelback.css";
@@ -28,7 +28,7 @@ export default {
     },
 
     // scenario: stripe-like feedback
-    main: ({ children }) => {
+    _main: ({ children }) => {
         return (
             <>
                 {children}
@@ -38,8 +38,26 @@ export default {
         );
     },
 
+    // scenario: vercel-like reveal
+    main: ({ children }) => {
+        return (
+            <>
+                {children}
+                <hr />
+                <FeelbackTaggedMessage contentSetId="your-content-set-id"
+                    style={["bordered", "width-md", "align-center"]}
+                    title="Was this page useful?"
+                    layout="reveal-message"
+                    preset={PRESET_EVALUATION}
+                />
+            </>
+        );
+    },
+
+
+
     // scenario: page up votes
-    toc: {
+    _toc: {
         extraContent: () =>
             <>
                 <hr className="divider" />
@@ -51,7 +69,7 @@ export default {
     },
 
     // scenario: send feedback button
-    _toc: {
+    toc: {
         extraContent: () =>
             <FeelbackTaggedMessage contentSetId="your-content-set-id"
                 layout="button-dialog"

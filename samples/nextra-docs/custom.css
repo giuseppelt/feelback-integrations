@@ -3,12 +3,6 @@
     padding-bottom: 1rem;
 }
 
-@media (min-width: 769px) {
-    .feelback-container {
-        max-width: 340px;
-    }
-}
-
 .feelback-container textarea {
     border: 1px solid #ccc;
     border-radius: 2px;
@@ -16,8 +10,8 @@
     font-size: 0.9rem;
 }
 
-.feelback-container .feelback-btn .label {
-    display: none;
+.feelback-container textarea:focus {
+    outline-color: #aaa;
 }
 
 .feelback-container .feelback-btn:nth-child(1).active {
