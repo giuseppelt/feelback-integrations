@@ -1,6 +1,7 @@
 import { DocsThemeConfig } from "nextra-theme-docs";
 import { FeelbackTaggedMessage, PRESET_FEELING, PRESET_FEEDBACK } from "@feelback/react";
 import { FeelbackYesNo, PRESET_LIKE_DISLIKE } from "@feelback/react";
+import { FeedbackStripeLike } from "./components/FeedbackStripeLike";
 import "@feelback/react/styles/feelback.css";
 
 
@@ -12,7 +13,7 @@ export default {
     feedback: { content: null },
 
     // scenario: evaluation form
-    main: ({ children }) => {
+    _main: ({ children }) => {
         return (
             <>
                 {children}
@@ -22,6 +23,17 @@ export default {
                     preset={PRESET_FEELING}
                     title="Did you find this page useful?"
                 />
+            </>
+        );
+    },
+
+    // scenario: stripe-like feedback
+    main: ({ children }) => {
+        return (
+            <>
+                {children}
+                <hr />
+                <FeedbackStripeLike />
             </>
         );
     },
@@ -45,5 +57,5 @@ export default {
                 layout="button-dialog"
                 preset={PRESET_FEEDBACK}
             />
-    }
+    },
 } as DocsThemeConfig
