@@ -7,7 +7,8 @@ export type FormHandlerProps<T> = Readonly<{
 }>
 
 export type FormProps<T> = FormHandlerProps<T> & Readonly<{
-  title?: string
+  title?: string | false
+  showButton?: boolean,
   alignButton?: "left" | "right"
   children?: ReactNode
   onValidate: () => T | undefined
@@ -17,6 +18,7 @@ export const Form = forwardRef<HTMLDivElement, FormProps<any>>((props, ref) => {
   const {
     title = "Send feedback",
     alignButton = "right",
+    showButton = true,
     onCancel,
     onSubmit,
     onValidate,
@@ -37,10 +39,13 @@ export const Form = forwardRef<HTMLDivElement, FormProps<any>>((props, ref) => {
         {title && <span className="feelback-text form-title">{title}</span>}
 
         {children}
-        <div className={`form-buttons feelback-buttons ${alignButton === "right" ? "align-end" : ""}`}>
-          <button className="feelback-btn btn-action" onClick={onClickSend}>Send</button>
-          {onCancel && <button className="feelback-btn btn-cancel" onClick={onCancel}>Cancel</button>}
-        </div>
+
+        {showButton &&
+          <div className={`form-buttons feelback-buttons ${alignButton === "right" ? "align-end" : ""}`}>
+            <button className="feelback-btn btn-action" onClick={onClickSend}>Send</button>
+            {onCancel && <button className="feelback-btn btn-cancel" onClick={onCancel}>Cancel</button>}
+          </div>
+        }
       </div>
     </div>
   );

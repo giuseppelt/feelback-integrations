@@ -9,7 +9,7 @@ import { Answer, FormHandlerProps } from ".";
 
 export type FeelbackLayoutProps<T> = Readonly<TargetContent & {
   className?: string
-  layout?: "button-switch" | "button-dialog" | "inline" | "radio-group" | "radio-group-dialog"
+  layout?: "button-switch" | "button-dialog" | "inline" | "radio-group" | "radio-group-dialog" | "reveal-message"
   label?: string
   textAnswer?: string
   onClose?: () => void
@@ -68,7 +68,7 @@ export const FeelbackLayout = forwardRef<HTMLDivElement, FeelbackLayoutProps<any
               </Dialog>
             );
 
-
+          case "reveal-message":
           case "inline":
           case "radio-group":
           default:

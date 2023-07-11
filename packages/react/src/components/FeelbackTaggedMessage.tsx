@@ -1,11 +1,13 @@
 import { forwardRef, useRef, useState } from "react";
 import { TargetContent } from "@feelback/js";
-import { ButtonValueList, FeelbackLayout, Form, FormHandlerProps, RadioValueList } from "../parts";
+import { ButtonValueList, FeelbackLayout, Form, FormHandlerProps, Question, RadioValueList } from "../parts";
 import { FeelbackValueDefinition } from "../types";
+import type { OneOrMany } from "../utils";
 
 
 export type FeelbackTaggedMessageProps = Readonly<TargetContent & {
-  layout?: "button-switch" | "button-dialog" | "inline" | "radio-group" | "radio-group-dialog"
+  layout?: "button-switch" | "button-dialog" | "inline" | "radio-group" | "radio-group-dialog" | "reveal-message"
+  style?: OneOrMany<"bordered" | `width-${"sm" | "md"}` | `align-center`>
   label?: string
   textAnswer?: string
   preset?: readonly FeelbackValueDefinition[]
@@ -34,6 +36,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     maxLength,
     textAnswer = "Thanks for your feedback",
     showLabels = false,
+    style: _style,
     onCancel,
     onSuccess,
     ...content
@@ -44,12 +47,14 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     return null;
   }
 
+  const style = (_style && Array.isArray(_style)) ? _style.join(" ") : _style || undefined;
+
   return (
-    <FeelbackLayout className={`feelback-tagged-message layout-${layout}`}
+    <FeelbackLayout className={`feelback-tagged-message layout-${layout} ${style}`}
       {...{ layout, label, onSuccess, ...content }}
     >
       <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, onCancel }}
-        layout={layout === "radio-group" || layout === "radio-group-dialog" ? "radio-group" : "form"}
+        layout={layout === "reveal-message" ? layout : layout === "radio-group" || layout === "radio-group-dialog" ? "radio-group" : "form"}
       />
     </FeelbackLayout>
   );
@@ -57,7 +62,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
 
 
 type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message?: string }> & Readonly<{
-  layout: "form" | "radio-group"
+  layout: "form" | "radio-group" | "reveal-message"
   tags: readonly FeelbackValueDefinition[]
   active?: "$auto" | (string & {})
   showLabels?: boolean
@@ -99,38 +104,41 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
   }
 
 
+  const TextArea = (
+    <textarea ref={messageRef}
+      required={isMessageRequired}
+      placeholder={placeholder}
+      minLength={minLength}
+      maxLength={maxLength}
+    />
+  );
+
+
   return (
-    <Form {...{ title, onCancel, onSubmit, ref }}
+    <Form {...{ onCancel, onSubmit, ref }}
       onValidate={onValidate}
+      title={layout === "reveal-message" ? false : title}
+      showButton={layout === "reveal-message" ? !!tag : true}
       alignButton={layout === "radio-group" ? "left" : "right"}
     >
 
       {layout === "form" &&
         <>
           <ButtonValueList items={tags} showLabels={showLabels} active={tag} onClick={setTag} />
-          <textarea ref={messageRef}
-            required={isMessageRequired}
-            placeholder={placeholder}
-            minLength={minLength}
-            maxLength={maxLength}
-          />
+          {TextArea}
         </>
       }
 
       {layout === "radio-group" &&
+        <RadioValueList items={tags} active={tag} onSelected={setTag}
+          onRenderAddon={({ isSelected }) => isSelected && TextArea}
+        />
+      }
+
+      {layout === "reveal-message" &&
         <>
-          <RadioValueList items={tags} active={tag} onSelected={setTag}
-            onRenderAddon={({ isSelected }) => {
-              return isSelected && (
-                <textarea ref={messageRef}
-                  required={isMessageRequired}
-                  placeholder={placeholder}
-                  minLength={minLength}
-                  maxLength={maxLength}
-                />
-              );
-            }}
-          />
+          <Question text={title} items={tags} showLabels={showLabels} active={tag} onClick={setTag} />
+          {tag && TextArea}
         </>
       }
     </Form>
