@@ -405,12 +405,15 @@ const BH = {
             const buttons = [...qsa(group, ":scope>button")]
                 .map(x => [x.getAttribute("data-feelback-value")!, x] as const);
 
+            const reveal = getElementAll(group.getAttribute("data-reveal"), container);
             const value = source.getAttribute("data-feelback-value")!;
             source.addEventListener("click", ev => {
                 BUTTON_GROUP.activate(buttons, value);
                 if (field) {
                     field.value = value;
                 }
+
+                reveal.forEach(x => x.classList.remove("hidden"));
 
                 stopEvent(ev);
             });
@@ -444,6 +447,24 @@ function getElement(el: string | HTMLElement, ...containers: (HTMLElement | unde
             }
         }
     }
+}
+
+function getElementAll(el: string | HTMLElement | HTMLElement[] | undefined | null, ...containers: (HTMLElement | undefined | null)[]): HTMLElement[] {
+    if (!el) return [];
+    if (typeof el !== "string") {
+        return Array.isArray(el) ? el : [el];
+    }
+
+    for (const container of containers) {
+        if (container) {
+            const child = qsa(container, el);
+            if (child.length) {
+                return [...child.values()];
+            }
+        }
+    }
+
+    return [];
 }
 
 
