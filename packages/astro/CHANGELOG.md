@@ -1,5 +1,11 @@
 # astro-feelback changelog
 
+## 0.2.4 Patch release
+- feat: new layout 'reveal-message' for FeelbackTaggedMessage
+- fix: forward btn-cancel slot for TaggedMessageForm
+- feat: new preset 'evaluation' for TaggedMessageForm
+- feat: showLabel and preselect props for TaggedMessageForm
+
 ## 0.2.3 Patch release
 - feat: new FeelbackSplitTaggedMessage component
 - fix: update package types

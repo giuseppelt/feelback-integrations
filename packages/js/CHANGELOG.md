@@ -1,5 +1,12 @@
 # @feelback/js changelog
 
+## 0.2.4 Patch release
+- feat(style): new detection for dark theme
+- feat(style): new container styles
+- feat(browser): reveal behavior
+- ref(icons): updated face emoji icons
+- ref: small style tweaks
+
 ## 0.2.3 Patch release
 - feat: allow multi form setup initialization
 - fix: radio-group styling

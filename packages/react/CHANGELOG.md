@@ -1,5 +1,11 @@
 # @feelback/react changelog
 
+## 0.2.4 Patch release
+- feat: new layout 'reveal-message' for FeelbackTaggedMessage
+- feat: new preset 'evaluation'
+- fix: FeelbackTaggedMessage default showLabels to false
+- fix: polyfill useId because not available in react17
+
 ## 0.2.3 Patch release
 - deps: updated @feelback/js to v0.2.3
 
