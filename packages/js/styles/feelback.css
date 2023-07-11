@@ -237,7 +237,9 @@
 .theme-dark .feelback-container,
 .theme-dark .feelback-style,
 html[data-theme=dark] .feelback-container,
-html[data-theme=dark] .feelback-style {
+html[data-theme=dark] .feelback-style,
+html.dark .feelback-container,
+html.dark .feelback-style {
   --highlight:
     255,
     255,
@@ -249,6 +251,8 @@ html[data-theme=dark] .feelback-style {
 .theme-dark .feelback-container .dialog .content,
 .theme-dark .feelback-style .dialog .content,
 html[data-theme=dark] .feelback-container .dialog .content,
-html[data-theme=dark] .feelback-style .dialog .content {
+html[data-theme=dark] .feelback-style .dialog .content,
+html.dark .feelback-container .dialog .content,
+html.dark .feelback-style .dialog .content {
   background: #111c29;
 }

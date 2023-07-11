@@ -281,7 +281,8 @@
 
 
 .theme-dark,
-html[data-theme='dark'] {
+html[data-theme='dark'],
+html.dark {
 
     .feelback-container,
     .feelback-style {
