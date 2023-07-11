@@ -2,9 +2,12 @@
 .feelback-style {
     --highlight: 0, 0, 0;
     --highlight-opacity: 0.08;
+    --border-color: rgba(128, 128, 128, .5);
+    --max-width: unset;
     --bg: #fff;
 
     position: relative;
+    max-width: var(--max-width);
 
     &.feelback-pulse {
         display: inline-block;
@@ -33,7 +36,7 @@
         display: none;
         position: absolute;
         background-color: var(--theme-bg, var(--bg));
-        border: 1px solid rgba(128, 128, 128, .5);
+        border: 1px solid var(--border-color);
         border-radius: 4px;
         z-index: 2;
     }
@@ -62,6 +65,30 @@
 
     .hidden {
         display: none;
+    }
+
+    &.bordered {
+        .content {
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 0.75rem;
+        }
+    }
+
+    &.width-md {
+        --max-width: 440px;
+        margin: 0 auto;
+    }
+
+    &.width-sm {
+        --max-width: 320px;
+        margin: 0 auto;
+    }
+
+    &.align-center {
+        .feelback-q {
+            justify-content: center;
+        }
     }
 }
 
@@ -261,6 +288,7 @@ html[data-theme='dark'] {
         --highlight: 255, 255, 255;
         --highlight-opacity: 0.15;
         --bg: transparent;
+        --border-color: rgba(255, 255, 255, .4);
 
         .dialog {
             .content {
