@@ -130,10 +130,10 @@ export function setupFeelback(config?: FeelbackConfig) {
                 ev.preventDefault();
                 ev.stopPropagation();
 
-                const value = getFormValue(form);
+                const { value, metadata } = getFormValue(form) || {};
                 if (!value) return;
 
-                sendFeelback({ endpoint, ...target, value }).then(
+                sendFeelback({ endpoint, ...target, value, metadata }).then(
                     () => {
                         BH.switch.run({ container });
                         if (params.behavior === "dialog") {
@@ -468,31 +468,59 @@ function getElementAll(el: string | HTMLElement | HTMLElement[] | undefined | nu
 }
 
 
-function getFormValue(form: HTMLElement): any {
-    const type = form.getAttribute("data-feelback-type");
-    if (type === "form-single") {
-        const field = qs(form, "[data-feelback-field]");
-        return field && getFieldValue(field);
-    }
+function getFormValue(form: HTMLElement): { value: any, metadata?: any } | undefined {
+    const isSingleValue = form.getAttribute("data-feelback-type") === "form-single";
 
     const fields = [...qsa(form, "[data-feelback-field]")];
-    const value = fields.reduce((r, f) => ({ ...r, ...getFieldValue(f) }), {});
+    let value = undefined! as object;
+    let metadata = undefined! as object;
 
-    if (Object.keys(value).length === 0) {
+    for (const field of fields) {
+        const entry = getFieldEntry(field);
+        if (!entry) continue;
+        if (entry?.$error) return;
+
+        Object.entries(entry).forEach(([key, fieldValue]) => {
+            if (key.startsWith("#")) {
+                metadata = { ...metadata, [key.substring(1)]: fieldValue };
+            } else {
+                value = { ...value, [key]: fieldValue };
+            }
+        });
+    }
+
+    if (!value || Object.keys(value).length === 0) {
         return;
     }
 
-    return value;
+    if (isSingleValue) {
+        value = Object.values(value).pop(); // pick the last value
+    }
+
+    return { value, metadata };
 }
 
-function getFieldValue(el: HTMLElement) {
-    const name = el.getAttribute("data-feelback-field") || (el as any).name;
+function getFieldEntry(el: HTMLElement) {
+    let name = el.getAttribute("data-feelback-field") || (el as any).name as string;
+
+    // override name with metadata key
+    if (el.hasAttribute("data-feelback-metadata")) {
+        // use # prefix to identify metadata keys
+        name = "#" + el.getAttribute("data-feelback-metadata")!;
+    }
+
     if (!name) return;
 
     if (el.tagName === "INPUT") {
         const input = el as HTMLInputElement;
+        const value = input.value.trim() || undefined;
+        const isRequired = input.required;
+
         if (input.type === "radio" && !input.checked) return;
-        return { [name]: input.value };
+        if (!value) return;
+        if (!value && isRequired) return { $error: "required" };
+
+        return { [name]: value };
     }
 
     if (el.tagName === "TEXTAREA") {
