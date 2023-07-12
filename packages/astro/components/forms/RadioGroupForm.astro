@@ -43,4 +43,5 @@ const group = `group-${Math.random().toString().substring(2, 7)}`;
     }
   </fieldset>
   {withMessage && <FieldLongText name="message" {...{ placeholder, minLength, maxLength }} />}
+  <slot name="btn-cancel" slot="btn-cancel" />
 </Form>
