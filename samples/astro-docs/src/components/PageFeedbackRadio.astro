@@ -1,0 +1,26 @@
+---
+import FeelbackTaggedMessage from "astro-feelback/components/FeelbackTaggedMessage.astro";
+
+type Props = {
+  layout: "radio-group" | "button-switch-radio-group" | "button-dialog-radio-group";
+};
+
+const CONTENT_SET_ID = "bffb3688-6489-408d-8d5e-52bb675609bc";
+
+const items = [
+  { value: "love", title: "I Love it", description: "Yeah, this is fantastic" },
+  { value: "happy", title: "It's Ok", description: "I'm happy with it" },
+  { value: "sad", title: "Not so great", description: "I think this could be better" },
+  { value: "hate", title: "I Hate it", description: "There's something wrong here" },
+];
+---
+
+<FeelbackTaggedMessage
+  contentSetId={CONTENT_SET_ID}
+  title="Was this helpful?"
+  placeholder={"Type your details... (optional)"}
+  items={items}
+  layout={Astro.props.layout}
+  showLabels={false}
+  preselect={false}
+/>

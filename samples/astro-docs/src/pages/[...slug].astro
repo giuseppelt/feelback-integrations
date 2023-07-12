@@ -3,6 +3,7 @@ import { CollectionEntry, getCollection } from "astro:content";
 import MainLayout from "../layouts/MainLayout.astro";
 import PageFeedback from "../components/PageFeedback.astro";
 import PageFeedbackEmoji from "../components/PageFeedbackEmoji.astro";
+import PageFeedbackRadio from "../components/PageFeedbackRadio.astro";
 
 export async function getStaticPaths() {
   const docs = await getCollection("docs");
@@ -25,4 +26,6 @@ const { Content, headings } = await post.render();
   <PageFeedback />
   <hr style="margin: 1.25rem 0;" />
   <PageFeedbackEmoji />
+  <hr style="margin: 1.25rem 0;" />
+  <PageFeedbackRadio layout="radio-group" />
 </MainLayout>
