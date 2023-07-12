@@ -1,6 +1,7 @@
 ---
 import Form from "../parts/Form.astro";
 import FieldLongText from "../parts/FieldLongText.astro";
+import FieldText from "../parts/FieldText.astro";
 
 interface Props {
   class?: string;
@@ -8,6 +9,7 @@ interface Props {
   placeholder?: string;
   minLength?: number;
   maxLength?: number;
+  withEmail?: boolean | "required" | "optional";
 }
 
 const {
@@ -16,10 +18,22 @@ const {
   placeholder = "Type your message",
   minLength,
   maxLength,
+  withEmail,
 } = Astro.props;
 ---
 
 <Form singleValue class={className} title={title}>
-  <FieldLongText {...{placeholder, minLength, maxLength}} />
+  <FieldLongText name="message" {...{ placeholder, minLength, maxLength }} />
+  {
+    withEmail && (
+      <FieldText
+        name="email"
+        type="email"
+        asMetadata="$user"
+        required={withEmail === "required"}
+        placeholder={`your@email.com${withEmail !== "required" ? " (optional)" : ""}`}
+      />
+    )
+  }
   <slot name="btn-cancel" slot="btn-cancel" />
 </Form>

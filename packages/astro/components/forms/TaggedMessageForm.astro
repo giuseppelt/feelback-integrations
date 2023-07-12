@@ -3,6 +3,7 @@ import Form from "../parts/Form.astro";
 import FieldLongText from "../parts/FieldLongText.astro";
 import FieldButtonValueList, { Props as ButtonListProps } from "../parts/FieldButtonValueList.astro";
 import type { FeelbackValueDefinition } from "../../src";
+import FieldText from "../parts/FieldText.astro";
 
 export type PresetName = "feeling" | "like-dislike" | "feedback" | "evaluation";
 
@@ -16,6 +17,7 @@ interface Props {
   minLength?: number;
   maxLength?: number;
   preselect?: number | string | false;
+  withEmail?: boolean | "required" | "optional";
 }
 
 const {
@@ -28,6 +30,7 @@ const {
   maxLength,
   showLabels = true,
   preselect = 0,
+  withEmail,
 } = Astro.props;
 
 const buttonListProps: ButtonListProps = {
@@ -55,5 +58,18 @@ const buttonListProps: ButtonListProps = {
     name="message"
     {...{ placeholder, minLength, maxLength }}
   />
+
+  {
+    withEmail && (
+      <FieldText
+        name="email"
+        type="email"
+        asMetadata="$user"
+        class={layout === "reveal" ? "hidden form-reveal" : undefined}
+        required={withEmail === "required"}
+        placeholder={`your@email.com${withEmail !== "required" ? " (optional)" : ""}`}
+      />
+    )
+  }
   <slot name="btn-cancel" slot="btn-cancel" />
 </Form>

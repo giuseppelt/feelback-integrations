@@ -2,6 +2,7 @@
 import Form from "../parts/Form.astro";
 import FieldLongText from "../parts/FieldLongText.astro";
 import { FeelbackValueDefinition } from "../../src/types";
+import FieldText from "../parts/FieldText.astro";
 
 interface Props {
   items: readonly FeelbackValueDefinition<string>[];
@@ -11,6 +12,7 @@ interface Props {
   minLength?: number;
   maxLength?: number;
   withMessage?: boolean;
+  withEmail?: boolean | "required" | "optional";
 }
 
 const {
@@ -21,6 +23,7 @@ const {
   minLength,
   maxLength,
   withMessage,
+  withEmail,
 } = Astro.props;
 
 const group = `group-${Math.random().toString().substring(2, 7)}`;
@@ -43,5 +46,16 @@ const group = `group-${Math.random().toString().substring(2, 7)}`;
     }
   </fieldset>
   {withMessage && <FieldLongText name="message" {...{ placeholder, minLength, maxLength }} />}
+  {
+    withEmail && (
+      <FieldText
+        name="email"
+        type="email"
+        asMetadata="$user"
+        required={withEmail === "required"}
+        placeholder={`your@email.com${withEmail !== "required" ? " (optional)" : ""}`}
+      />
+    )
+  }
   <slot name="btn-cancel" slot="btn-cancel" />
 </Form>

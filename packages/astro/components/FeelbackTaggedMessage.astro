@@ -33,6 +33,7 @@ type Props = TargetContent & {
   textAnswer?: string;
   placeholder?: string;
   preselect?: string | number | boolean;
+  withEmail?: boolean | "required" | "optional";
 };
 
 const {
@@ -48,6 +49,7 @@ const {
   maxLength,
   showLabels,
   preselect,
+  withEmail,
   ...target
 } = Astro.props;
 
@@ -61,6 +63,7 @@ const formAttrs = {
   minLength,
   maxLength,
   showLabels,
+  withEmail,
   preselect: preselect === true ? undefined : preselect,
 };
 

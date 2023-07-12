@@ -1,0 +1,36 @@
+---
+interface Props {
+  class?: string;
+  name?: string;
+  asMetadata?: string;
+  placeholder?: string;
+  type?: "text" | "email";
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+}
+
+const {
+  class: className,
+  name,
+  asMetadata,
+  placeholder = "Type your message",
+  required,
+  minLength,
+  maxLength,
+  type = "text",
+  /* */
+} = Astro.props;
+---
+
+<input
+  type={type}
+  data-feelback-field
+  data-feelback-metadata={asMetadata}
+  name={name}
+  class={className}
+  required={required}
+  placeholder={placeholder}
+  minlength={minLength}
+  maxlength={maxLength}
+/>

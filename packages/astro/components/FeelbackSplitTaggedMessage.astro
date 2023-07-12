@@ -17,12 +17,14 @@ type Props = TargetContent & {
   minLength?: number;
   maxLength?: number;
   withMessage?: boolean;
+  withEmail?: boolean | "required" | "optional";
 };
 
 const {
   textQuestion = "Was this page useful?",
   textAnswer = "Thanks for your feedback",
   withMessage,
+  withEmail,
   titles,
   minLength,
   maxLength,
@@ -36,6 +38,7 @@ const formAttrs = {
   minLength,
   maxLength,
   withMessage,
+  withEmail,
 };
 
 const items = [

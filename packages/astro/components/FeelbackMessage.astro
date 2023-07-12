@@ -14,6 +14,7 @@ type Props = TargetContent & {
   maxLength?: number;
   textAnswer?: string;
   placeholder?: string;
+  withEmail?: boolean | "optional" | "required";
 };
 
 const {
@@ -24,6 +25,7 @@ const {
   placeholder = "Type your message",
   minLength,
   maxLength,
+  withEmail,
   ...target
 } = Astro.props;
 
@@ -34,6 +36,7 @@ const formAttrs = {
   placeholder,
   minLength,
   maxLength,
+  withEmail,
 };
 
 const btnCancelAttrs =
