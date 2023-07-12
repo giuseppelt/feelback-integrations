@@ -1,14 +1,14 @@
 ---
-import type { ButtonItem } from "../parts/ButtonValueList.astro";
 import Form from "../parts/Form.astro";
 import FieldLongText from "../parts/FieldLongText.astro";
 import FieldButtonValueList, { Props as ButtonListProps } from "../parts/FieldButtonValueList.astro";
+import type { FeelbackValueDefinition } from "../../src";
 
 export type PresetName = "feeling" | "like-dislike" | "feedback" | "evaluation";
 
 interface Props {
   layout?: "inline" | "reveal";
-  preset: PresetName | readonly ButtonItem[];
+  preset: PresetName | readonly FeelbackValueDefinition[];
   class?: string;
   title?: string;
   placeholder?: string;

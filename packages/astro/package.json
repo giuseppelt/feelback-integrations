@@ -13,7 +13,7 @@
     },
     "scripts": {
         "prepublishOnly": "node ./tasks/copyAssets.js",
-        "build": "tsc",
+        "build": "tsc -p tsconfig.build",
         "assets:copy": "node ./tasks/copyAssets.js",
         "assets:link": "node ./tasks/linkAssets.js"
     },
