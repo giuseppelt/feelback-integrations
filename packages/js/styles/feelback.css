@@ -35,6 +35,12 @@
 .feelback-style input {
   width: 100%;
 }
+.feelback-container input[type=text],
+.feelback-container input[type=email],
+.feelback-style input[type=text],
+.feelback-style input[type=email] {
+  padding: 0.5rem;
+}
 .feelback-container .popup,
 .feelback-style .popup {
   display: none;

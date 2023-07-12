@@ -32,6 +32,11 @@
         width: 100%;
     }
 
+    input[type="text"],
+    input[type="email"] {
+        padding: .5rem;
+    }
+
     .popup {
         display: none;
         position: absolute;
