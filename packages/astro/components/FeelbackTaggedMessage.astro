@@ -1,10 +1,12 @@
 ---
-import type { TargetContent } from "../src";
+import type { FeelbackValueDefinition, TargetContent } from "../src";
 import Component from "./parts/Component.astro";
 import SwitchResult from "./parts/SwitchResult.astro";
 import TriggerButton from "./parts/TriggerButton.astro";
 import TaggedMessageForm, { PresetName } from "./forms/TaggedMessageForm.astro";
 import FeelbackForm from "./FeelbackForm.astro";
+import RadioGroupForm from "./forms/RadioGroupForm.astro";
+import { getPreset } from "./presets";
 
 type Style =
   | "align-center" //
@@ -13,8 +15,16 @@ type Style =
 
 type Props = TargetContent & {
   style?: Style | Style[];
-  layout?: "button-switch" | "button-dialog" | "inline" | "reveal-message";
-  preset?: PresetName;
+  layout?:
+    | "button-switch"
+    | "button-dialog"
+    | "button-switch-radio-group"
+    | "button-dialog-radio-group"
+    | "inline"
+    | "reveal-message"
+    | "radio-group";
+  preset?: PresetName | readonly FeelbackValueDefinition[];
+  items?: readonly FeelbackValueDefinition[];
   title?: string;
   label?: string;
   showLabels?: boolean;
@@ -32,7 +42,8 @@ const {
   title = "Send feedback",
   textAnswer = "Thanks for your feedback",
   placeholder = "Type your message",
-  preset = "feedback",
+  preset: _preset = "feedback",
+  items: _items,
   minLength,
   maxLength,
   showLabels,
@@ -44,7 +55,7 @@ const style = Array.isArray(_style) ? _style.join(" ") : _style;
 const behavior = layout === "button-dialog" ? "dialog" : layout === "button-switch" ? "switch" : undefined;
 
 const formAttrs = {
-  preset,
+  preset: _items || _preset,
   title,
   placeholder,
   minLength,
@@ -53,8 +64,10 @@ const formAttrs = {
   preselect: preselect === true ? undefined : preselect,
 };
 
+const items = Array.isArray(formAttrs.preset) ? formAttrs.preset : getPreset(formAttrs.preset as string);
+
 const btnCancelAttrs =
-  layout === "button-switch"
+  layout === "button-switch" || layout === "button-switch-radio-group"
     ? {
         "data-behavior-action": "switch",
         "data-behavior-target": ".trigger-btn",
@@ -66,7 +79,10 @@ const btnCancelAttrs =
 ---
 
 {
-  (layout === "button-dialog" || layout === "button-switch") && (
+  (layout === "button-dialog" ||
+    layout === "button-switch" ||
+    layout === "button-switch-radio-group" ||
+    layout === "button-dialog-radio-group") && (
     <Component
       component="form"
       class={`feelback-tagged-message layout-${layout} ${style || ""}`}
@@ -75,15 +91,29 @@ const btnCancelAttrs =
     >
       <SwitchResult textAnswer={textAnswer}>
         <TriggerButton
-          action={layout === "button-dialog" ? "dialog" : "switch"}
+          action={layout === "button-dialog" || layout === "button-dialog-radio-group" ? "dialog" : "switch"}
           target=".feelback-form"
           label={label}
         />
-        <TaggedMessageForm {...formAttrs} class={`hidden${layout === "button-dialog" ? " dialog" : ""}`}>
-          <button slot="btn-cancel" class="feelback-btn btn-cancel" title="Cancel" {...btnCancelAttrs}>
-            Cancel
-          </button>
-        </TaggedMessageForm>
+        {(layout === "button-switch-radio-group" || layout === "button-dialog-radio-group") && (
+          <RadioGroupForm
+            items={items}
+            class={`hidden${layout === "button-dialog-radio-group" ? " dialog" : ""}`}
+            withMessage
+            {...formAttrs}
+          >
+            <button slot="btn-cancel" class="feelback-btn btn-cancel" title="Cancel" {...btnCancelAttrs}>
+              Cancel
+            </button>
+          </RadioGroupForm>
+        )}
+        {(layout === "button-dialog" || layout === "button-switch") && (
+          <TaggedMessageForm {...formAttrs} class={`hidden${layout === "button-dialog" ? " dialog" : ""}`}>
+            <button slot="btn-cancel" class="feelback-btn btn-cancel" title="Cancel" {...btnCancelAttrs}>
+              Cancel
+            </button>
+          </TaggedMessageForm>
+        )}
       </SwitchResult>
     </Component>
   )
@@ -106,8 +136,16 @@ const btnCancelAttrs =
 
 {
   layout === "inline" && (
-    <FeelbackForm class={`feelback-tagged-message layout-inline ${style || ""}`} textAnswer={textAnswer} {...target}>
+    <FeelbackForm class={`feelback-tagged-message layout-${layout} ${style || ""}`} textAnswer={textAnswer} {...target}>
       <TaggedMessageForm {...formAttrs} />
+    </FeelbackForm>
+  )
+}
+
+{
+  layout === "radio-group" && (
+    <FeelbackForm class={`feelback-tagged-message layout-${layout} ${style || ""}`} textAnswer={textAnswer} {...target}>
+      <RadioGroupForm items={items} withMessage {...formAttrs} />
     </FeelbackForm>
   )
 }
