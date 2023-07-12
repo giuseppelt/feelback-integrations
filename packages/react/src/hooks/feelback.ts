@@ -18,11 +18,12 @@ export function useSendFeelback(content: TargetContent) {
     const context = useFeelbackContext();
     const target = useMemoTargetContent(content);
 
-    return useAsyncCall((value: any) => sendFeelback({
+    return useAsyncCall((value: any, metadata?: Record<string, string | number>) => sendFeelback({
         endpoint: context?.endpoint,
         store: context?.store,
         ...target,
         value,
+        metadata,
     }));
 }
 

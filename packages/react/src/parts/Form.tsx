@@ -1,9 +1,14 @@
 import { ReactElement, ReactNode, forwardRef } from "react";
 
 
+export type FeelbackData<T = any> = {
+  value: T
+  metadata?: Record<string, string | number>
+}
+
 export type FormHandlerProps<T> = Readonly<{
   onCancel?: () => void
-  onSubmit?: (value: T) => void
+  onSubmit?: (value: FeelbackData<T>) => void
 }>
 
 export type FormProps<T> = FormHandlerProps<T> & Readonly<{
@@ -11,7 +16,7 @@ export type FormProps<T> = FormHandlerProps<T> & Readonly<{
   showButton?: boolean,
   alignButton?: "left" | "right"
   children?: ReactNode
-  onValidate: () => T | undefined
+  onValidate: () => (FeelbackData<T> | undefined)
 }>
 
 export const Form = forwardRef<HTMLDivElement, FormProps<any>>((props, ref) => {

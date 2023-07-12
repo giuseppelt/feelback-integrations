@@ -20,6 +20,7 @@ export type FeelbackTaggedMessageProps = Readonly<TargetContent & {
   | "minLength"
   | "placeholder"
   | "showLabels"
+  | "withEmail"
   | "onCancel"
 >>
 
@@ -37,6 +38,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     textAnswer = "Thanks for your feedback",
     showLabels = false,
     style: _style,
+    withEmail,
     onCancel,
     onSuccess,
     ...content
@@ -53,7 +55,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     <FeelbackLayout className={`feelback-tagged-message layout-${layout} ${style}`}
       {...{ layout, label, onSuccess, ...content }}
     >
-      <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, onCancel }}
+      <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, withEmail, onCancel }}
         layout={layout === "reveal-message" ? layout : layout === "radio-group" || layout === "radio-group-dialog" ? "radio-group" : "form"}
       />
     </FeelbackLayout>
@@ -70,6 +72,7 @@ type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message?: string }
   minLength?: number
   maxLength?: number
   placeholder?: string
+  withEmail?: boolean | "optional" | "required"
 }>
 
 const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) => {
@@ -82,6 +85,7 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
     placeholder = "Type your message",
     minLength,
     maxLength,
+    withEmail,
     onCancel,
     onSubmit,
   } = props;
@@ -89,27 +93,43 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
 
   const isMessageRequired = !!minLength && minLength > 0;
   const messageRef = useRef<HTMLTextAreaElement>(null);
+  const isEmailRequired = withEmail === "required";
+  const emailRef = useRef<HTMLInputElement>(null);
   const [tag, setTag] = useState(active === "$auto" ? tags[0].value : active);
 
   const onValidate = () => {
-    const message = messageRef.current?.value.trim() || undefined;
+    const message = messageRef.current?.value?.trim() || undefined;
+    const email = emailRef.current?.value?.trim() || undefined;
 
     if (!tag) return;
     if (isMessageRequired && (!message || message.length < minLength)) return;
+    if ((email && !email.match(/^(.+)@(.+)$/)) || isEmailRequired) return;
 
     return {
-      tag,
-      message,
+      value: {
+        tag,
+        message,
+      },
+      metadata: email ? { $user: email } : undefined
     };
   }
 
 
-  const TextArea = (
+  const MessageInput = (
     <textarea ref={messageRef}
       required={isMessageRequired}
       placeholder={placeholder}
       minLength={minLength}
       maxLength={maxLength}
+    />
+  );
+
+  const EmailInput = withEmail && (
+    <input ref={emailRef}
+      type="email"
+      name="email"
+      required={isEmailRequired}
+      placeholder={`your@email.com${!isEmailRequired ? " (optional)" : ""}`}
     />
   );
 
@@ -125,20 +145,31 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
       {layout === "form" &&
         <>
           <ButtonValueList items={tags} showLabels={showLabels} active={tag} onClick={setTag} />
-          {TextArea}
+          {MessageInput}
+          {EmailInput}
         </>
       }
 
       {layout === "radio-group" &&
         <RadioValueList items={tags} active={tag} onSelected={setTag}
-          onRenderAddon={({ isSelected }) => isSelected && TextArea}
+          onRenderAddon={({ isSelected }) => isSelected && (
+            <>
+              {MessageInput}
+              {EmailInput}
+            </>
+          )}
         />
       }
 
       {layout === "reveal-message" &&
         <>
           <Question text={title} items={tags} showLabels={showLabels} active={tag} onClick={setTag} />
-          {tag && TextArea}
+          {tag && (
+            <>
+              {MessageInput}
+              {EmailInput}
+            </>
+          )}
         </>
       }
     </Form>

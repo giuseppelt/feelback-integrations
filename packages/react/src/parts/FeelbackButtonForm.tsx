@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { TargetContent } from "@feelback/js";
 import { useSendFeelback, useOnClickOutside } from "../hooks";
 import { mergeCallback } from "./utils";
-import { Answer, FormHandlerProps } from ".";
+import { Answer, FeelbackData, FormHandlerProps } from ".";
 
 
 
@@ -30,7 +30,11 @@ export const FeelbackLayout = forwardRef<HTMLDivElement, FeelbackLayoutProps<any
   } = props;
 
 
-  const { call: onSubmit, isSuccess } = useSendFeelback(content);
+  const { call, isSuccess } = useSendFeelback(content);
+
+  const onSubmit = ({ value, metadata }: FeelbackData) => {
+    call(value, metadata);
+  }
 
   useEffect(() => {
     if (isSuccess) {
