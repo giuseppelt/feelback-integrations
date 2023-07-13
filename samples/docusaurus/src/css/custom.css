@@ -57,3 +57,54 @@ article .feelback-container textarea {
   border-radius: 4px;
   padding: 0.5rem;
 }
+
+
+.small-text {
+  font-size: 0.8rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.float-right {
+  float: right;
+}
+
+
+.github-like {
+  .feelback-container {
+    --max-width: 300px;
+    text-align: left;
+
+    .feelback-q {
+      padding: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+
+      .feelback-text {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .feelback-btn {
+        padding: 1.1rem 1.15rem;
+        font-size: 1.2em;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(125, 125, 125, .4);
+
+        &.active:nth-child(1) {
+          background-color: blue;
+          color: white;
+        }
+
+        &.active:nth-child(2) {
+          background-color: red;
+          color: white;
+        }
+      }
+    }
+  }
+}
