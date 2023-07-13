@@ -2,7 +2,7 @@
 interface Props {
   class?: string;
   name?: string;
-  placeholder?: string;
+  placeholder?: string | false;
   required?: boolean;
   minLength?: number;
   maxLength?: number;
@@ -24,6 +24,6 @@ const {
   name={name}
   class={className}
   required={required}
-  placeholder={placeholder}
+  placeholder={placeholder || undefined}
   minlength={minLength}
   maxlength={maxLength}></textarea>

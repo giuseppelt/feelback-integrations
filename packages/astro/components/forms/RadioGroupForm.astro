@@ -8,7 +8,7 @@ interface Props {
   items: readonly FeelbackValueDefinition<string>[];
   class?: string;
   title?: string;
-  placeholder?: string;
+  placeholder?: string | false;
   minLength?: number;
   maxLength?: number;
   withMessage?: boolean;

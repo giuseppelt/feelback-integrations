@@ -6,7 +6,7 @@ import FieldText from "../parts/FieldText.astro";
 interface Props {
   class?: string;
   title?: string;
-  placeholder?: string;
+  placeholder?: string | false;
   minLength?: number;
   maxLength?: number;
   withEmail?: boolean | "required" | "optional";

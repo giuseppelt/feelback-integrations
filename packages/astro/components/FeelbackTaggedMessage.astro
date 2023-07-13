@@ -31,7 +31,7 @@ type Props = TargetContent & {
   minLength?: number;
   maxLength?: number;
   textAnswer?: string;
-  placeholder?: string;
+  placeholder?: string | false;
   preselect?: string | number | boolean;
   withEmail?: boolean | "required" | "optional";
 };
