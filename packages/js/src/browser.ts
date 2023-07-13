@@ -91,6 +91,7 @@ export function setupFeelback(config?: FeelbackConfig) {
 
                 if (isSameFeelbackValue(currentValue, value)) {
                     if (revokable) {
+                        disableTimeout(container, 1000); // disable to avoid double clicks
                         removeFeelback({ endpoint, feelbackId: revokable.feelbackId }).then(
                             () => {
                                 BUTTON_GROUP.deactivate(buttons, value);
@@ -102,6 +103,7 @@ export function setupFeelback(config?: FeelbackConfig) {
                         );
                     }
                 } else {
+                    disableTimeout(container, 1000); // disable to avoid double clicks
                     sendFeelback({ endpoint, ...target, value }).then(
                         () => {
                             BUTTON_GROUP.activate(buttons, value);
@@ -133,6 +135,7 @@ export function setupFeelback(config?: FeelbackConfig) {
                 const { value, metadata } = getFormValue(form) || {};
                 if (!value) return;
 
+                disableTimeout(container, 1000); // disable to avoid double clicks                
                 sendFeelback({ endpoint, ...target, value, metadata }).then(
                     () => {
                         BH.switch.run({ container });
@@ -147,6 +150,12 @@ export function setupFeelback(config?: FeelbackConfig) {
         });
     }
 
+    function disableTimeout(el: HTMLElement, ms: number) {
+        el.style.pointerEvents = "none";
+        setTimeout(() => {
+            el.style.pointerEvents = "";
+        }, ms);
+    }
 
     function setupCountLabels(container: HTMLElement, target: TargetContent, params: FeelbackContainerConfig) {
         if (!params.showCount) return [];
