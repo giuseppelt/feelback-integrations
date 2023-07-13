@@ -43,7 +43,7 @@ type MessageFormProps = FormHandlerProps<string> & Readonly<{
   title?: string
   minLength?: number
   maxLength?: number
-  placeholder?: string
+  placeholder?: string | false
   withEmail?: boolean | "optional" | "required"
   slots?: {
     BeforeMessage?: ReactElement
@@ -86,7 +86,7 @@ const MessageForm = forwardRef<any, MessageFormProps>((props, ref) => {
       {slots?.BeforeMessage}
       <textarea ref={textRef}
         required
-        placeholder={placeholder}
+        placeholder={placeholder || undefined}
         minLength={minLength}
         maxLength={maxLength}
       />

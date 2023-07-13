@@ -73,7 +73,7 @@ type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message?: string }
   title?: string
   minLength?: number
   maxLength?: number
-  placeholder?: string
+  placeholder?: string | false
   withEmail?: boolean | "optional" | "required"
   slots?: {
     BeforeMessage?: ReactElement
@@ -127,7 +127,7 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
       {slots?.BeforeMessage}
       <textarea ref={messageRef}
         required={isMessageRequired}
-        placeholder={placeholder}
+        placeholder={placeholder || undefined}
         minLength={minLength}
         maxLength={maxLength}
       />
