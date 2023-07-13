@@ -13,6 +13,7 @@ export type FeelbackMessageProps = Readonly<TargetContent & {
   | "minLength"
   | "placeholder"
   | "withEmail"
+  | "placeholderEmail"
   | "slots"
 >
 
@@ -26,6 +27,7 @@ export function FeelbackMessage(props: FeelbackMessageProps) {
     maxLength,
     textAnswer = "Thanks for your feedback",
     withEmail,
+    placeholderEmail,
     slots,
     ...content
   } = props;
@@ -33,7 +35,7 @@ export function FeelbackMessage(props: FeelbackMessageProps) {
 
   return (
     <FeelbackLayout className={`feelback-message layout-${layout}`} {...{ layout, label, ...content }}>
-      <MessageForm {...{ title, placeholder, minLength, maxLength, withEmail, slots }} />
+      <MessageForm {...{ title, placeholder, minLength, maxLength, withEmail, placeholderEmail, slots }} />
     </FeelbackLayout>
   )
 }
@@ -45,6 +47,7 @@ type MessageFormProps = FormHandlerProps<string> & Readonly<{
   maxLength?: number
   placeholder?: string | false
   withEmail?: boolean | "optional" | "required"
+  placeholderEmail?: string | false;
   slots?: {
     BeforeMessage?: ReactElement
     BeforeEmail?: ReactElement
@@ -59,6 +62,7 @@ const MessageForm = forwardRef<any, MessageFormProps>((props, ref) => {
     minLength,
     maxLength,
     withEmail,
+    placeholderEmail = `your@email.com${withEmail && withEmail !== "required" ? " (optional)" : ""}`,
     slots,
     onCancel,
     onSubmit,
@@ -98,7 +102,7 @@ const MessageForm = forwardRef<any, MessageFormProps>((props, ref) => {
             type="email"
             name="email"
             required={isEmailRequired}
-            placeholder={`your@email.com${!isEmailRequired ? " (optional)" : ""}`}
+            placeholder={placeholderEmail || undefined}
           />
         </>
       )}

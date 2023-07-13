@@ -21,6 +21,7 @@ export type FeelbackTaggedMessageProps = Readonly<TargetContent & {
   | "placeholder"
   | "showLabels"
   | "withEmail"
+  | "placeholderEmail"
   | "onCancel"
   | "slots"
 >>
@@ -40,6 +41,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     showLabels = false,
     style: _style,
     withEmail,
+    placeholderEmail,
     onCancel,
     onSuccess,
     slots,
@@ -57,7 +59,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     <FeelbackLayout className={`feelback-tagged-message layout-${layout} ${style}`}
       {...{ layout, label, onSuccess, ...content }}
     >
-      <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, withEmail, onCancel, slots }}
+      <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, withEmail, placeholderEmail, onCancel, slots }}
         layout={layout === "reveal-message" ? layout : layout === "radio-group" || layout === "radio-group-dialog" ? "radio-group" : "form"}
       />
     </FeelbackLayout>
@@ -75,6 +77,7 @@ type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message?: string }
   maxLength?: number
   placeholder?: string | false
   withEmail?: boolean | "optional" | "required"
+  placeholderEmail?: string | false
   slots?: {
     BeforeMessage?: ReactElement
     BeforeEmail?: ReactElement
@@ -93,6 +96,7 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
     minLength,
     maxLength,
     withEmail,
+    placeholderEmail = `your@email.com${withEmail && withEmail !== "required" ? " (optional)" : ""}`,
     slots,
     onCancel,
     onSubmit,
@@ -141,7 +145,7 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
         type="email"
         name="email"
         required={isEmailRequired}
-        placeholder={`your@email.com${!isEmailRequired ? " (optional)" : ""}`}
+        placeholder={placeholderEmail || undefined}
       />
     </>
   );
