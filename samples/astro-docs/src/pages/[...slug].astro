@@ -1,7 +1,8 @@
 ---
 import { CollectionEntry, getCollection } from "astro:content";
 import MainLayout from "../layouts/MainLayout.astro";
-import PageFeedback from "../components/PageFeedback.astro";
+import PageFeedbackStripeLike from "../components/PageFeedbackStripeLike.astro";
+import PageFeedbackGithubLike from "../components/PageFeedbackGithubLike.astro";
 import PageFeedbackEmoji from "../components/PageFeedbackEmoji.astro";
 import PageFeedbackRadio from "../components/PageFeedbackRadio.astro";
 
@@ -23,9 +24,11 @@ const { Content, headings } = await post.render();
 <MainLayout headings={headings} {...post.data}>
   <Content />
   <hr />
-  <PageFeedback />
+  <PageFeedbackStripeLike />
   <hr style="margin: 1.25rem 0;" />
   <PageFeedbackEmoji />
   <hr style="margin: 1.25rem 0;" />
   <PageFeedbackRadio layout="radio-group" />
+  <hr style="margin: 1.25rem 0;" />
+  <PageFeedbackGithubLike />
 </MainLayout>

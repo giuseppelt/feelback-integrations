@@ -1,0 +1,64 @@
+---
+import FeelbackTaggedMessage from "astro-feelback/components/FeelbackTaggedMessage.astro";
+
+const CONTENT_SET_ID = "bffb3688-6489-408d-8d5e-52bb675609bc";
+---
+
+<FeelbackTaggedMessage
+  contentSetId={CONTENT_SET_ID}
+  layout="reveal-message"
+  preset="like-dislike"
+  title="Did this doc help you?"
+  placeholder={false}
+  placeholderEmail={false}
+  withEmail
+>
+  <div slot="before-message" class="small-text">
+    <b>Let us know the details</b>
+    <span class="float-right">optional</span>
+  </div>
+  <div slot="before-email" class="small-text mt-2">
+    <b>If we can contact you with more questions, please enter your email address</b>
+    <span class="float-right">optional</span>
+  </div>
+  <div slot="before-form-buttons" class="small-text mt-2">
+    If you need a reply, please contact support instead.
+  </div>
+</FeelbackTaggedMessage>
+
+<style>
+  .feelback-container {
+    --max-width: 280px;
+  }
+  .feelback-container :global(.feelback-q) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .feelback-container :global(.feelback-q .feelback-text) {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  .feelback-container :global(.feelback-q .feelback-btn) {
+    padding: 1.15rem 1.1rem;
+    font-size: 1.4rem;
+    border: 1px solid rgba(125, 125, 125, 0.5);
+    border-radius: 0.5rem;
+  }
+  .feelback-container :global(.feelback-q .feelback-btn.active:nth-child(1)) {
+    background-color: blue;
+  }
+  .feelback-container :global(.feelback-q .feelback-btn.active:nth-child(2)) {
+    background-color: red;
+  }
+  .mt-2 {
+    margin-top: 0.5rem;
+  }
+  .small-text {
+    font-size: 0.8rem;
+  }
+  .float-right {
+    float: right;
+  }
+</style>
