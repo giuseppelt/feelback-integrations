@@ -1,0 +1,23 @@
+{
+  "name": "feelback-sample-astro-starlight",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.5.0",
+    "astro": "2.7.0",
+    "astro-feelback": "^0.2.0",
+    "sharp": "^0.32.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "astro-feelback": "link:../../packages/astro/"
+    }
+  }
+}

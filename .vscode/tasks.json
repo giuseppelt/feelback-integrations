@@ -91,6 +91,20 @@
             "presentation": {
                 "reveal": "never"
             }
+        },
+        {
+            "label": "example astro-starlight",
+            "type": "npm",
+            "script": "dev",
+            "group": "build",
+            "path": "${workspaceFolder}/samples/astro-starlight",
+            "options": {
+                "cwd": "${workspaceFolder}/samples/astro-starlight"
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            }
         }
     ]
 }
