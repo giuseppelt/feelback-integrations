@@ -1,6 +1,6 @@
 import type { TargetContent } from "@feelback/js";
 import type { FeelbackValueDefinition } from "../types";
-import { useFeelbackAggregates, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
+import { useFeelbackAggregates, useLocalFeelback, useRemoveFeelback, useSendFeelback, useValueTimeout } from "../hooks";
 import { ButtonValueList } from "../parts";
 
 
@@ -21,12 +21,16 @@ export function FeelbackPulse(props: FeelbackPulseProps) {
   const { call: send } = useSendFeelback(content);
   const { call: remove } = useRemoveFeelback(content);
 
+  const { value: isDisabled, set: setDisabled } = useValueTimeout(1000); // disable submitting for 1s, to avoid double clicks
+
   const onClick = () => {
     if (localValue === "+") {
       if (isRevokable) {
+        setDisabled(true);
         remove();
       }
     } else {
+      setDisabled(true);
       send("+");
     }
   };
@@ -37,7 +41,7 @@ export function FeelbackPulse(props: FeelbackPulseProps) {
   }
 
   return (
-    <div className="feelback-container feelback-pulse">
+    <div className="feelback-container feelback-pulse" style={{ pointerEvents: isDisabled ? "none" : undefined }}>
       <ButtonValueList
         items={preset}
         showCount={showCount}

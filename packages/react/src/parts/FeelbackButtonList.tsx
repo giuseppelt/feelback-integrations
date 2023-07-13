@@ -1,6 +1,6 @@
 import type { TargetContent } from "@feelback/js";
 import type { FeelbackValueDefinition } from "../types";
-import { useFeelbackAggregates, useTimeout, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
+import { useFeelbackAggregates, useTimeout, useLocalFeelback, useRemoveFeelback, useSendFeelback, useValueTimeout } from "../hooks";
 import { Answer, Question } from ".";
 
 
@@ -27,14 +27,18 @@ export function FeelbackButtonList(props: FeelbackButtonListProps) {
   const { call: send, isSuccess, reset } = useSendFeelback(content);
   const { call: remove } = useRemoveFeelback(content);
 
+  const { value: isDisabled, set: setDisabled } = useValueTimeout(1000); // disable submitting for 1s, to avoid double clicks
+
   const isAnswerVisible = textAnswer && isSuccess;
 
   const onClick = (value: string) => {
     if (value === localValue) {
       if (isRevokable) {
+        setDisabled(true);
         remove();
       }
     } else {
+      setDisabled(true);
       send(value);
     }
   };
@@ -48,7 +52,7 @@ export function FeelbackButtonList(props: FeelbackButtonListProps) {
   }
 
   return (
-    <div className={`feelback-container${className ? " " + className : ""}`}>
+    <div className={`feelback-container${className ? " " + className : ""}`} style={{ pointerEvents: isDisabled ? "none" : undefined }}>
       {!isAnswerVisible &&
         <Question text={textQuestion}
           items={preset}

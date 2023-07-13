@@ -1,7 +1,7 @@
 import { ReactElement, cloneElement, forwardRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { TargetContent } from "@feelback/js";
-import { useSendFeelback, useOnClickOutside } from "../hooks";
+import { useSendFeelback, useOnClickOutside, useValueTimeout } from "../hooks";
 import { mergeCallback } from "./utils";
 import { Answer, FeelbackData, FormHandlerProps } from ".";
 
@@ -31,8 +31,10 @@ export const FeelbackLayout = forwardRef<HTMLDivElement, FeelbackLayoutProps<any
 
 
   const { call, isSuccess } = useSendFeelback(content);
+  const { value: isDisabled, set: setDisabled } = useValueTimeout(1000); // disable submitting for 1s, to avoid double clicks
 
   const onSubmit = ({ value, metadata }: FeelbackData) => {
+    setDisabled(true);
     call(value, metadata);
   }
 
@@ -44,7 +46,7 @@ export const FeelbackLayout = forwardRef<HTMLDivElement, FeelbackLayoutProps<any
 
 
   return (
-    <div ref={ref} className={`feelback-container${className ? " " + className : ""}`}>
+    <div ref={ref} className={`feelback-container${className ? " " + className : ""}`} style={{ pointerEvents: isDisabled ? "none" : undefined }}>
       {!isSuccess && (() => {
         switch (layout) {
           case "button-switch":

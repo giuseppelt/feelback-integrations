@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { TargetContent } from "@feelback/js";
 import type { FeelbackValueDefinition } from "../types";
-import { useFeelbackAggregates, useOnClickOutside, useLocalFeelback, useRemoveFeelback, useSendFeelback } from "../hooks";
+import { useFeelbackAggregates, useOnClickOutside, useLocalFeelback, useRemoveFeelback, useSendFeelback, useValueTimeout } from "../hooks";
 import { ButtonValueList, FeelbackButtonList, Question } from "../parts";
 import IconHappy from "@feelback/js/icons/icon-happy.svg";
 
@@ -39,6 +39,8 @@ function PickerLayout(props: FeelbackReactionProps) {
   const { call: send, isSuccess } = useSendFeelback(content);
   const { call: remove } = useRemoveFeelback(content);
 
+  const { value: isDisabled, set: setDisabled } = useValueTimeout(1000); // disable submitting for 1s, to avoid double clicks
+
   const [isOpen, setOpen] = useState(false);
   const pickerRef = useOnClickOutside<HTMLDivElement>(isOpen, () => setOpen(false));
 
@@ -49,9 +51,11 @@ function PickerLayout(props: FeelbackReactionProps) {
 
     if (value === localValue) {
       if (isRevokable) {
+        setDisabled(true);
         remove();
       }
     } else {
+      setDisabled(true);
       send(value);
     }
   };
@@ -63,7 +67,7 @@ function PickerLayout(props: FeelbackReactionProps) {
   }
 
   return (
-    <div className="feelback-container feelback-reaction layout-picker">
+    <div className="feelback-container feelback-reaction layout-picker" style={{ pointerEvents: isDisabled ? "none" : undefined }}>
       <Question
         text={
           <>
