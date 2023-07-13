@@ -1,7 +1,7 @@
 {
     "name": "@feelback/react",
     "description": "Use Feelback service within your React website",
-    "version": "0.2.4",
+    "version": "0.3.0",
     "type": "module",
     "types": "./dist/index.d.ts",
     "exports": {

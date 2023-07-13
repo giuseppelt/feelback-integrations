@@ -1,5 +1,15 @@
 # astro-feelback changelog
 
+## 0.3.0 Major release
+- feat: custom email placeholder for message-based feelbacks
+- feat: can disable default message placeholder
+- feat: expansion slots for message-based feelbacks
+- feat: disable for 1s after submit to avoid doubles
+- feat: new radio-group layouts for FeelbackTaggedMessage
+- fix: RadioGroupForm forwards btn-cancel slot
+- ref: turned a preset into a object to support props
+- deps: updated @feelback/js to v0.3.0
+
 ## 0.2.4 Patch release
 - feat: new layout 'reveal-message' for FeelbackTaggedMessage
 - fix: forward btn-cancel slot for TaggedMessageForm

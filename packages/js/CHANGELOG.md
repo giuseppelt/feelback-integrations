@@ -1,5 +1,10 @@
 # @feelback/js changelog
 
+## 0.3.0 Major release
+- feat: disable for 1s after submit to avoid doubles
+- feat: detected metadata props and required inputs
+- ref: refined input style
+
 ## 0.2.4 Patch release
 - feat(style): new detection for dark theme
 - feat(style): new container styles
