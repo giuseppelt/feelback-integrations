@@ -20,7 +20,17 @@ const {
 <form class={`feelback-form ${className || ""}`} data-feelback-type={singleValue ? "form-single" : undefined}>
   <div class="content">
     {title && <span class="feelback-text form-title">{title}</span>}
+
     <slot />
+
+    {
+      Astro.slots.has("before-form-buttons") && (
+        <div class={revealButtons ? "hidden form-reveal" : undefined}>
+          <slot name="before-form-buttons" />
+        </div>
+      )
+    }
+
     <div
       class={`form-buttons feelback-buttons${alignButton === "right" ? " align-end" : ""}${
         revealButtons ? " hidden form-reveal" : ""

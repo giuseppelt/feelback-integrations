@@ -61,6 +61,9 @@ const btnCancelAttrs =
           label={label}
         />
         <MessageForm {...formAttrs} class={`hidden${layout === "button-dialog" ? " dialog" : ""}`}>
+          <slot name="before-message" slot="before-message" />
+          <slot name="before-email" slot="before-email" />
+          <slot name="before-form-buttons" slot="before-form-buttons" />
           <button slot="btn-cancel" class="feelback-btn btn-cancel" title="Cancel" {...btnCancelAttrs}>
             Cancel
           </button>
@@ -73,7 +76,11 @@ const btnCancelAttrs =
 {
   layout === "inline" && (
     <FeelbackForm class="feelback-message layout-inline" textAnswer={textAnswer} {...target}>
-      <MessageForm {...formAttrs} />
+      <MessageForm {...formAttrs}>
+        <slot name="before-message" slot="before-message" />
+        <slot name="before-email" slot="before-email" />
+        <slot name="before-form-buttons" slot="before-form-buttons" />
+      </MessageForm>
     </FeelbackForm>
   )
 }

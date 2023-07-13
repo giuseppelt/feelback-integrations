@@ -53,6 +53,13 @@ const buttonListProps: ButtonListProps = {
     )
   }
 
+  {
+    Astro.slots.has("before-message") && (
+      <div class={layout === "reveal" ? "hidden form-reveal" : undefined}>
+        <slot name="before-message" />
+      </div>
+    )
+  }
   <FieldLongText
     class={layout === "reveal" ? "hidden form-reveal" : undefined}
     name="message"
@@ -61,15 +68,24 @@ const buttonListProps: ButtonListProps = {
 
   {
     withEmail && (
-      <FieldText
-        name="email"
-        type="email"
-        asMetadata="$user"
-        class={layout === "reveal" ? "hidden form-reveal" : undefined}
-        required={withEmail === "required"}
-        placeholder={`your@email.com${withEmail !== "required" ? " (optional)" : ""}`}
-      />
+      <>
+        {Astro.slots.has("before-email") && (
+          <div class={layout === "reveal" ? "hidden form-reveal" : undefined}>
+            <slot name="before-email" />
+          </div>
+        )}
+        <FieldText
+          name="email"
+          type="email"
+          asMetadata="$user"
+          class={layout === "reveal" ? "hidden form-reveal" : undefined}
+          required={withEmail === "required"}
+          placeholder={`your@email.com${withEmail !== "required" ? " (optional)" : ""}`}
+        />
+      </>
     )
   }
+
+  <slot name="before-form-buttons" slot="before-form-buttons" />
   <slot name="btn-cancel" slot="btn-cancel" />
 </Form>

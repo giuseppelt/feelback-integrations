@@ -23,17 +23,24 @@ const {
 ---
 
 <Form singleValue class={className} title={title}>
+  <slot name="before-message" />
   <FieldLongText name="message" {...{ placeholder, minLength, maxLength }} />
+
   {
     withEmail && (
-      <FieldText
-        name="email"
-        type="email"
-        asMetadata="$user"
-        required={withEmail === "required"}
-        placeholder={`your@email.com${withEmail !== "required" ? " (optional)" : ""}`}
-      />
+      <>
+        <slot name="before-email" />
+        <FieldText
+          name="email"
+          type="email"
+          asMetadata="$user"
+          required={withEmail === "required"}
+          placeholder={`your@email.com${withEmail !== "required" ? " (optional)" : ""}`}
+        />
+      </>
     )
   }
+
+  <slot name="before-form-buttons" slot="before-form-buttons" />
   <slot name="btn-cancel" slot="btn-cancel" />
 </Form>

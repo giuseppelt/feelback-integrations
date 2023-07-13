@@ -105,6 +105,9 @@ const btnCancelAttrs =
             withMessage
             {...formAttrs}
           >
+            <slot name="before-message" slot="before-message" />
+            <slot name="before-email" slot="before-email" />
+            <slot name="before-form-buttons" slot="before-form-buttons" />
             <button slot="btn-cancel" class="feelback-btn btn-cancel" title="Cancel" {...btnCancelAttrs}>
               Cancel
             </button>
@@ -112,6 +115,9 @@ const btnCancelAttrs =
         )}
         {(layout === "button-dialog" || layout === "button-switch") && (
           <TaggedMessageForm {...formAttrs} class={`hidden${layout === "button-dialog" ? " dialog" : ""}`}>
+            <slot name="before-message" slot="before-message" />
+            <slot name="before-email" slot="before-email" />
+            <slot name="before-form-buttons" slot="before-form-buttons" />
             <button slot="btn-cancel" class="feelback-btn btn-cancel" title="Cancel" {...btnCancelAttrs}>
               Cancel
             </button>
@@ -131,7 +137,11 @@ const btnCancelAttrs =
       {...target}
     >
       <SwitchResult textAnswer={textAnswer}>
-        <TaggedMessageForm layout="reveal" {...formAttrs} />
+        <TaggedMessageForm layout="reveal" {...formAttrs}>
+          <slot name="before-message" slot="before-message" />
+          <slot name="before-email" slot="before-email" />
+          <slot name="before-form-buttons" slot="before-form-buttons" />
+        </TaggedMessageForm>
       </SwitchResult>
     </Component>
   )
@@ -140,7 +150,11 @@ const btnCancelAttrs =
 {
   layout === "inline" && (
     <FeelbackForm class={`feelback-tagged-message layout-${layout} ${style || ""}`} textAnswer={textAnswer} {...target}>
-      <TaggedMessageForm {...formAttrs} />
+      <TaggedMessageForm {...formAttrs}>
+        <slot name="before-message" slot="before-message" />
+        <slot name="before-email" slot="before-email" />
+        <slot name="before-form-buttons" slot="before-form-buttons" />
+      </TaggedMessageForm>
     </FeelbackForm>
   )
 }
@@ -148,7 +162,11 @@ const btnCancelAttrs =
 {
   layout === "radio-group" && (
     <FeelbackForm class={`feelback-tagged-message layout-${layout} ${style || ""}`} textAnswer={textAnswer} {...target}>
-      <RadioGroupForm items={items} withMessage {...formAttrs} />
+      <RadioGroupForm items={items} withMessage {...formAttrs}>
+        <slot name="before-message" slot="before-message" />
+        <slot name="before-email" slot="before-email" />
+        <slot name="before-form-buttons" slot="before-form-buttons" />
+      </RadioGroupForm>
     </FeelbackForm>
   )
 }

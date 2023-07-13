@@ -89,12 +89,11 @@ const items = [
     {
       Object.entries(tags).map(([value, items]) => {
         return (
-          <RadioGroupForm
-            items={items}
-            title={titles?.[value]}
-            class={`hidden feelback-form-${value}`}
-            {...formAttrs}
-          />
+          <RadioGroupForm items={items} title={titles?.[value]} class={`hidden feelback-form-${value}`} {...formAttrs}>
+            <slot name="before-message" slot="before-message" />
+            <slot name="before-email" slot="before-email" />
+            <slot name="before-form-buttons" slot="before-form-buttons" />
+          </RadioGroupForm>
         );
       })
     }
