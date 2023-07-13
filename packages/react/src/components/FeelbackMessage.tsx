@@ -1,4 +1,4 @@
-import { forwardRef, useRef } from "react";
+import { ReactElement, forwardRef, useRef } from "react";
 import { TargetContent } from "@feelback/js";
 import { FeelbackLayout, Form, FormHandlerProps } from "../parts";
 
@@ -13,6 +13,7 @@ export type FeelbackMessageProps = Readonly<TargetContent & {
   | "minLength"
   | "placeholder"
   | "withEmail"
+  | "slots"
 >
 
 export function FeelbackMessage(props: FeelbackMessageProps) {
@@ -25,13 +26,14 @@ export function FeelbackMessage(props: FeelbackMessageProps) {
     maxLength,
     textAnswer = "Thanks for your feedback",
     withEmail,
+    slots,
     ...content
   } = props;
 
 
   return (
     <FeelbackLayout className={`feelback-message layout-${layout}`} {...{ layout, label, ...content }}>
-      <MessageForm {...{ title, placeholder, minLength, maxLength, withEmail }} />
+      <MessageForm {...{ title, placeholder, minLength, maxLength, withEmail, slots }} />
     </FeelbackLayout>
   )
 }
@@ -43,6 +45,11 @@ type MessageFormProps = FormHandlerProps<string> & Readonly<{
   maxLength?: number
   placeholder?: string
   withEmail?: boolean | "optional" | "required"
+  slots?: {
+    BeforeMessage?: ReactElement
+    BeforeEmail?: ReactElement
+    BeforeFormButtons?: ReactElement
+  }
 }>
 
 const MessageForm = forwardRef<any, MessageFormProps>((props, ref) => {
@@ -52,6 +59,7 @@ const MessageForm = forwardRef<any, MessageFormProps>((props, ref) => {
     minLength,
     maxLength,
     withEmail,
+    slots,
     onCancel,
     onSubmit,
   } = props;
@@ -74,20 +82,25 @@ const MessageForm = forwardRef<any, MessageFormProps>((props, ref) => {
   };
 
   return (
-    <Form {...{ title, onCancel, onSubmit, ref }} onValidate={onValidate}>
+    <Form {...{ slots, title, onCancel, onSubmit, ref }} onValidate={onValidate}>
+      {slots?.BeforeMessage}
       <textarea ref={textRef}
         required
         placeholder={placeholder}
         minLength={minLength}
         maxLength={maxLength}
       />
+
       {withEmail && (
-        <input ref={emailRef}
-          type="email"
-          name="email"
-          required={isEmailRequired}
-          placeholder={`your@email.com${!isEmailRequired ? " (optional)" : ""}`}
-        />
+        <>
+          {slots?.BeforeEmail}
+          <input ref={emailRef}
+            type="email"
+            name="email"
+            required={isEmailRequired}
+            placeholder={`your@email.com${!isEmailRequired ? " (optional)" : ""}`}
+          />
+        </>
       )}
     </Form>
   );

@@ -15,6 +15,9 @@ export type FormProps<T> = FormHandlerProps<T> & Readonly<{
   title?: string | false
   showButton?: boolean,
   alignButton?: "left" | "right"
+  slots?: {
+    BeforeFormButtons?: ReactElement
+  },
   children?: ReactNode
   onValidate: () => (FeelbackData<T> | undefined)
 }>
@@ -27,6 +30,7 @@ export const Form = forwardRef<HTMLDivElement, FormProps<any>>((props, ref) => {
     onCancel,
     onSubmit,
     onValidate,
+    slots,
     children,
   } = props;
 
@@ -44,6 +48,8 @@ export const Form = forwardRef<HTMLDivElement, FormProps<any>>((props, ref) => {
         {title && <span className="feelback-text form-title">{title}</span>}
 
         {children}
+
+        {showButton && slots?.BeforeFormButtons}
 
         {showButton &&
           <div className={`form-buttons feelback-buttons ${alignButton === "right" ? "align-end" : ""}`}>

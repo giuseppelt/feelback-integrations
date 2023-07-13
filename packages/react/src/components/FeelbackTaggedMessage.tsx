@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState } from "react";
+import { ReactElement, ReactNode, forwardRef, useRef, useState } from "react";
 import { TargetContent } from "@feelback/js";
 import { ButtonValueList, FeelbackLayout, Form, FormHandlerProps, Question, RadioValueList } from "../parts";
 import { FeelbackValueDefinition } from "../types";
@@ -22,6 +22,7 @@ export type FeelbackTaggedMessageProps = Readonly<TargetContent & {
   | "showLabels"
   | "withEmail"
   | "onCancel"
+  | "slots"
 >>
 
 export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
@@ -41,6 +42,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     withEmail,
     onCancel,
     onSuccess,
+    slots,
     ...content
   } = props;
 
@@ -55,7 +57,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
     <FeelbackLayout className={`feelback-tagged-message layout-${layout} ${style}`}
       {...{ layout, label, onSuccess, ...content }}
     >
-      <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, withEmail, onCancel }}
+      <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, withEmail, onCancel, slots }}
         layout={layout === "reveal-message" ? layout : layout === "radio-group" || layout === "radio-group-dialog" ? "radio-group" : "form"}
       />
     </FeelbackLayout>
@@ -73,6 +75,11 @@ type TaggedMessageFormProps = FormHandlerProps<{ tag: string, message?: string }
   maxLength?: number
   placeholder?: string
   withEmail?: boolean | "optional" | "required"
+  slots?: {
+    BeforeMessage?: ReactElement
+    BeforeEmail?: ReactElement
+    BeforeFormButtons?: ReactElement
+  }
 }>
 
 const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) => {
@@ -86,10 +93,10 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
     minLength,
     maxLength,
     withEmail,
+    slots,
     onCancel,
     onSubmit,
   } = props;
-
 
   const isMessageRequired = !!minLength && minLength > 0;
   const messageRef = useRef<HTMLTextAreaElement>(null);
@@ -116,21 +123,27 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
 
 
   const MessageInput = (
-    <textarea ref={messageRef}
-      required={isMessageRequired}
-      placeholder={placeholder}
-      minLength={minLength}
-      maxLength={maxLength}
-    />
+    <>
+      {slots?.BeforeMessage}
+      <textarea ref={messageRef}
+        required={isMessageRequired}
+        placeholder={placeholder}
+        minLength={minLength}
+        maxLength={maxLength}
+      />
+    </>
   );
 
   const EmailInput = withEmail && (
-    <input ref={emailRef}
-      type="email"
-      name="email"
-      required={isEmailRequired}
-      placeholder={`your@email.com${!isEmailRequired ? " (optional)" : ""}`}
-    />
+    <>
+      {slots?.BeforeEmail}
+      <input ref={emailRef}
+        type="email"
+        name="email"
+        required={isEmailRequired}
+        placeholder={`your@email.com${!isEmailRequired ? " (optional)" : ""}`}
+      />
+    </>
   );
 
 
@@ -140,6 +153,7 @@ const TaggedMessageForm = forwardRef<any, TaggedMessageFormProps>((props, ref) =
       title={layout === "reveal-message" ? false : title}
       showButton={layout === "reveal-message" ? !!tag : true}
       alignButton={layout === "radio-group" ? "left" : "right"}
+      slots={slots}
     >
 
       {layout === "form" &&
