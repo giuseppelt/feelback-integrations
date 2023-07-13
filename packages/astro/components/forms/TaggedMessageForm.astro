@@ -13,6 +13,7 @@ interface Props {
   class?: string;
   title?: string;
   placeholder?: string | false;
+  placeholderEmail?: string | false;
   showLabels?: boolean;
   minLength?: number;
   maxLength?: number;
@@ -31,6 +32,7 @@ const {
   showLabels,
   preselect,
   withEmail,
+  placeholderEmail,
 } = Astro.props;
 
 const buttonListProps: ButtonListProps = {
@@ -80,7 +82,7 @@ const buttonListProps: ButtonListProps = {
           asMetadata="$user"
           class={layout === "reveal" ? "hidden form-reveal" : undefined}
           required={withEmail === "required"}
-          placeholder={`your@email.com${withEmail !== "required" ? " (optional)" : ""}`}
+          placeholder={placeholderEmail || undefined}
         />
       </>
     )

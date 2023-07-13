@@ -18,6 +18,7 @@ type Props = TargetContent & {
   maxLength?: number;
   withMessage?: boolean;
   withEmail?: boolean | "required" | "optional";
+  placeholderEmail?: string | false;
 };
 
 const {
@@ -29,6 +30,7 @@ const {
   minLength,
   maxLength,
   placeholder = `${!minLength || minLength < 1 ? "(optional) " : ""}Please give us details`,
+  placeholderEmail = `your@email.com${withEmail && withEmail !== "required" ? " (optional)" : ""}`,
   tags = [],
   ...target
 } = Astro.props;
@@ -39,6 +41,7 @@ const formAttrs = {
   maxLength,
   withMessage,
   withEmail,
+  placeholderEmail,
 };
 
 const items = [
