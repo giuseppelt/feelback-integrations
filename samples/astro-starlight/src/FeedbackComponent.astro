@@ -19,10 +19,14 @@ const CONTENT_SET_ID = "$content-set-id-from-panel";
         margin: 0 auto 3rem;
         --max-width: 400px !important;
     }
+
     .feelback-container [data-feelback-type="button-group"] .feelback-btn {
         border-radius: 100%;
     }
-    .feelback-container .feelback-btn.active {
+
+    .feelback-container
+        [data-feelback-type="button-group"]
+        .feelback-btn.active {
         color: var(--sl-color-text-invert);
         background-color: var(--sl-color-text-accent);
     }
@@ -43,5 +47,11 @@ const CONTENT_SET_ID = "$content-set-id-from-panel";
     .feelback-container .feelback-btn[type="submit"] {
         border-radius: 0.5rem;
         padding: 1.25rem 2rem;
+        color: var(--sl-color-text-invert);
+        background-color: var(--sl-color-text-accent);
+        font-weight: bold;
+    }
+    .feelback-container .feelback-btn[type="submit"]:hover {
+        background-color: hsl(var(--sl-hue-accent), 80%, 70%);
     }
 </style>
