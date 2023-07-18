@@ -32,12 +32,12 @@ const group = `group-${Math.random().toString().substring(2, 7)}`;
 ---
 
 <Form class={className} title={title} alignButton="left">
-  <fieldset class="feelback-radio-group">
+  <fieldset class="feelback-radio-group" data-feelback-field="tag" data-required>
     {
       items.map(({ value, title, description }) => (
         <div class="feelback-radio-item-wrap">
           <div class="feelback-radio-item">
-            <input id={`${group}-${value}`} name="tag" type="radio" value={value} data-feelback-field />
+            <input id={`${group}-${value}`} name="tag" type="radio" value={value} required />
             <div class="feelback-radio-side">
               {title && <label for={`${group}-${value}`}>{title}</label>}
               {description && <span class="feelback-text">{description}</span>}
