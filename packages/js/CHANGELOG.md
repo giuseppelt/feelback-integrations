@@ -1,5 +1,9 @@
 # @feelback/js changelog
 
+## 0.3.1 Patch release
+- feat(/browser): new toggle-class behavior
+- fix(browser): fixed radio group required validation
+
 ## 0.3.0 Major release
 - feat: disable for 1s after submit to avoid doubles
 - feat: detected metadata props and required inputs

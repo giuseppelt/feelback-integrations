@@ -1,5 +1,9 @@
 # astro-feelback changelog
 
+## 0.3.1 Patch release
+- fix: fixed radio group required validation
+- deps: updated @feelback/js to v0.3.1
+
 ## 0.3.0 Major release
 - feat: custom email placeholder for message-based feelbacks
 - feat: can disable default message placeholder
