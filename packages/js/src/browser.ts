@@ -58,6 +58,7 @@ export function setupFeelback(config?: FeelbackConfig) {
                 case "switch": return BH.switch.setup(container, button);
                 case "popup": return BH.popup.setup(container, button);
                 case "dialog": return BH.dialog.setup(container, button);
+                case "toggle-class": return BH.toggleClass.setup(container, button);
                 case "set-field": return BH.setField.setup(container, button);
             }
         });
@@ -327,9 +328,49 @@ const BH = {
             }
         }
     },
+    toggleClass: {
+        setup(container: HTMLElement, source: HTMLElement) {
+            const target = getTargetAll(source.getAttribute("data-behavior-target")!, source?.parentElement, container);
+            if (!target || target.length === 0) return;
+
+            const value = source.getAttribute("data-behavior-value")?.trim();
+            if (!value) return;
+
+            const commands = ["on", "off"];
+            const directives = value.split(/,|;/).map(x => x.split(":")).filter(([command]) => commands.includes(command)) as [string, string][];
+
+            source.addEventListener("click", ev => {
+                BH.toggleClass.run({ container, target, directives });
+                stopEvent(ev);
+            });
+        },
+        run({ container, target, directives }: {
+            container: HTMLElement
+            target: HTMLElement | HTMLElement[]
+            directives: [string, string][]
+        }) {
+            if (!Array.isArray(target)) {
+                target = [target];
+            }
+
+            target.forEach(t => {
+                directives.forEach(([command, value]) => {
+                    if (command === "on") {
+                        if (!t.classList.contains(value)) {
+                            t.classList.add(value);
+                        }
+                    } else if (command === "off") {
+                        if (t.classList.contains(value)) {
+                            t.classList.remove(value);
+                        }
+                    }
+                });
+            });
+        }
+    },
     popup: {
         setup(container: HTMLElement, source: HTMLElement) {
-            const target = getElement(source.getAttribute("data-behavior-target") || ".popup", source?.parentElement, container);
+            const target = getTarget(source.getAttribute("data-behavior-target") || ".popup", source?.parentElement, container);
             if (!target) return;
 
             source.addEventListener("click", ev => {
@@ -352,7 +393,7 @@ const BH = {
     dialog: {
         closeActive: undefined as Function | undefined,
         setup(container: HTMLElement, source: HTMLElement) {
-            const target = getElement(source.getAttribute("data-behavior-target") || ".dialog", source?.parentElement, container);
+            const target = getTarget(source.getAttribute("data-behavior-target") || ".dialog", source?.parentElement, container);
             if (!target) return;
 
             // detach and move to dom-end
@@ -442,6 +483,22 @@ function qsa<T extends Element = HTMLElement>(el: ParentNode, selector: string) 
 function stopEvent(ev: Event) {
     ev.preventDefault();
     ev.stopPropagation();
+}
+
+function getTarget(el: string | HTMLElement, ...containers: (HTMLElement | undefined | null)[]): HTMLElement | undefined {
+    if (el === ":container") {
+        return containers[containers.length - 1] || undefined;
+    }
+
+    return getElement(el, ...containers);
+}
+
+function getTargetAll(el: string | HTMLElement, ...containers: (HTMLElement | undefined | null)[]): HTMLElement[] {
+    if (el === ":container") {
+        return [containers[containers.length - 1] || undefined!].filter(x => !!x);
+    }
+
+    return getElementAll(el, ...containers);
 }
 
 
