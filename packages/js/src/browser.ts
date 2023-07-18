@@ -582,11 +582,24 @@ function getFieldEntry(el: HTMLElement) {
         const value = input.value.trim() || undefined;
         const isRequired = input.required;
 
-        if (input.type === "radio" && !input.checked) return;
         if (!value) return;
         if (!value && isRequired) return { $error: "required" };
 
         return { [name]: value };
+    }
+
+    if (el.tagName === "FIELDSET") {
+        if (el.classList.contains("feelback-radio-group") || el.getAttribute("data-feelback-type") === "radio-group") {
+            const isRequired = el.hasAttribute("data-required");
+            const radio = el.querySelector<HTMLInputElement>("input[type='radio']:checked");
+            const value = radio?.value;
+            name = name || radio?.name || "";
+
+            if (!value && isRequired) return { $error: "required" };
+            if (!value || !name) return;
+
+            return { [name]: value };
+        }
     }
 
     if (el.tagName === "TEXTAREA") {
