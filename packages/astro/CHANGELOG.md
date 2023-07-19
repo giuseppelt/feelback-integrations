@@ -1,5 +1,8 @@
 # astro-feelback changelog
 
+## 0.3.2 Patch release
+- deps: updated @feelback/js to v0.3.2
+
 ## 0.3.1 Patch release
 - fix: fixed radio group required validation
 - deps: updated @feelback/js to v0.3.1

@@ -1,7 +1,10 @@
 # @feelback/js changelog
 
+## 0.3.2 Patch release
+- feat(browser): dispatch custom events on send and revoke
+
 ## 0.3.1 Patch release
-- feat(/browser): new toggle-class behavior
+- feat(browser): new toggle-class behavior
 - fix(browser): fixed radio group required validation
 
 ## 0.3.0 Major release
