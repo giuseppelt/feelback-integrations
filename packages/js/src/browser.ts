@@ -97,6 +97,10 @@ export function setupFeelback(config?: FeelbackConfig) {
                             () => {
                                 BUTTON_GROUP.deactivate(buttons, value);
                                 COUNT_LABELS.delta(countsLabels, value, -1);
+
+                                container.dispatchEvent(new Event("feedback-removed", {
+                                    bubbles: true
+                                }));
                             },
                             err => {
                                 error("Cannot remove feelback", err)
@@ -115,6 +119,10 @@ export function setupFeelback(config?: FeelbackConfig) {
 
                             COUNT_LABELS.delta(countsLabels, String(currentValue ?? "0"), -1);
                             COUNT_LABELS.delta(countsLabels, value, 1);
+
+                            container.dispatchEvent(new Event("feedback-sent", {
+                                bubbles: true
+                            }));
                         },
                         err => {
                             error("Cannot send feelback", err);
@@ -143,6 +151,10 @@ export function setupFeelback(config?: FeelbackConfig) {
                         if (params.behavior === "dialog") {
                             BH.dialog.closeActive?.();
                         }
+
+                        container.dispatchEvent(new Event("feelback-sent", {
+                            bubbles: true
+                        }));
                     },
                     err => {
                         error("Cannot send feelback", err);
