@@ -1,9 +1,10 @@
 ---
-import ButtonValueList, { ButtonItem, PresetName } from "./ButtonValueList.astro";
+import type { FeelbackValueDefinition } from "../..";
+import ButtonValueList from "./ButtonValueList.astro";
 
 export interface Props {
   name: string;
-  preset: PresetName | readonly ButtonItem[];
+  preset: string | readonly FeelbackValueDefinition[];
   class?: string;
   showLabels?: boolean;
   reveal?: string;

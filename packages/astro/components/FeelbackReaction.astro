@@ -1,13 +1,12 @@
 ---
-import type { TargetContent } from "..";
-import type { ButtonItem } from "./parts/ButtonValueList.astro";
+import type { FeelbackValueDefinition, TargetContent } from "..";
 import FeelbackReactionPicker from "./FeelbackReactionPicker.astro";
 import FeelbackReactionList from "./FeelbackReactionList.astro";
 
 type PresetName = "feeling" | "github" | "facebook";
 
 type Props = TargetContent & {
-  preset: PresetName | readonly ButtonItem[];
+  preset: PresetName | readonly FeelbackValueDefinition[];
   layout?: "picker" | "list";
   pickerTitle?: string;
   showCount?: boolean;
