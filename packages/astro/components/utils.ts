@@ -1,4 +1,4 @@
-import type { TargetContent } from "../src";
+import type { TargetContent } from "..";
 
 
 export function getTarget(target: TargetContent): TargetContent {

@@ -1,3 +1,4 @@
+import type { FeelbackValueDefinition } from "..";
 import iconHappy from "@feelback/js/icons/icon-happy.svg?raw";
 import iconLove from "@feelback/js/icons/icon-love.svg?raw";
 import iconCry from "@feelback/js/icons/icon-cry.svg?raw";
@@ -14,7 +15,6 @@ import iconCheck from "@feelback/js/icons/icon-check.svg?raw";
 import iconTimes from "@feelback/js/icons/icon-times.svg?raw";
 import iconArrowUp from "@feelback/js/icons/icon-arrow-up.svg?raw";
 import iconArrowDown from "@feelback/js/icons/icon-arrow-down.svg?raw";
-import { FeelbackValueDefinition } from "../src";
 
 const PRESETS = {
     "pulse-heart": [{ value: "+", icon: [iconHeart, iconHeartActive], title: "Love" }],
