@@ -1,5 +1,9 @@
 # astro-feelback changelog
 
+## 0.3.3 Patch release
+ - fix: corrected type import paths
+ - fix: replaced old ButtonItem type with FeelbackValueDefinition
+
 ## 0.3.2 Patch release
 - deps: updated @feelback/js to v0.3.2
 
