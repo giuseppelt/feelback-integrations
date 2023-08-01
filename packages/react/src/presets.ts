@@ -44,12 +44,12 @@ export const PRESET_PULSE_LIKE: FeelbackValueDefinition[] = [
 
 export const PRESET_LIKE_DISLIKE: FeelbackValueDefinition[] = [
     {
-        value: "-1",
+        value: "+1",
         icon: IconLike,
         title: "Like",
     },
     {
-        value: "+1",
+        value: "-1",
         icon: IconDislike,
         title: "Dislike",
     }
