@@ -1,0 +1,14 @@
+---
+import type { FeelbackValueDefinition } from "astro-feelback";
+import FeelbackReaction from "astro-feelback/components/FeelbackReaction.astro";
+import LikeIcon from "astro-feelback/icons/icon-like.svg?raw";
+
+const CONTENT_SET_ID = "bffb3688-6489-408d-8d5e-52bb675609bc";
+const REACTIONS: FeelbackValueDefinition[] = [
+  { value: "like", icon: LikeIcon }, // use builtin icons from the package... it's just HTML
+  { value: "love", icon: "😍" }, // or you can pass a string, with an emoji or anything you want
+  { value: "laugh", icon: "🤣" },
+];
+---
+
+<FeelbackReaction contentSetId={CONTENT_SET_ID} preset={REACTIONS} />

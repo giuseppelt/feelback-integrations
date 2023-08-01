@@ -4,6 +4,7 @@ import MainLayout from "../layouts/MainLayout.astro";
 import PageFeedbackStripeLike from "../components/PageFeedbackStripeLike.astro";
 import PageFeedbackGithubLike from "../components/PageFeedbackGithubLike.astro";
 import PageFeedbackEmoji from "../components/PageFeedbackEmoji.astro";
+import PageFeelbackCustomEmoji from "../components/PageFeelbackCustomEmoji.astro";
 import PageFeedbackRadio from "../components/PageFeedbackRadio.astro";
 
 export async function getStaticPaths() {
@@ -31,4 +32,6 @@ const { Content, headings } = await post.render();
   <PageFeedbackRadio layout="radio-group" />
   <hr style="margin: 1.25rem 0;" />
   <PageFeedbackGithubLike />
+  <hr style="margin: 1.25rem 0;" />
+  <PageFeelbackCustomEmoji />
 </MainLayout>
