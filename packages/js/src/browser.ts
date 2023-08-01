@@ -120,7 +120,8 @@ export function setupFeelback(config?: FeelbackConfig) {
                             COUNT_LABELS.delta(countsLabels, String(currentValue ?? "0"), -1);
                             COUNT_LABELS.delta(countsLabels, value, 1);
 
-                            container.dispatchEvent(new Event("feedback-sent", {
+                            container.dispatchEvent(new CustomEvent("feedback-sent", {
+                                detail: { ...target, value },
                                 bubbles: true
                             }));
                         },
@@ -152,7 +153,8 @@ export function setupFeelback(config?: FeelbackConfig) {
                             BH.dialog.closeActive?.();
                         }
 
-                        container.dispatchEvent(new Event("feelback-sent", {
+                        container.dispatchEvent(new CustomEvent("feelback-sent", {
+                            detail: { ...target, value },
                             bubbles: true
                         }));
                     },
