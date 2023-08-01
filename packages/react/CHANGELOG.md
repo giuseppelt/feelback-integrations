@@ -1,5 +1,11 @@
 # @feelback/react changelog
 
+## 0.3.4 Patch release
+- feat: exposed the feelback value onSuccess
+- feat: exposed revokable flag
+- fix: fixed like-dislike preset values
+- deps: updated @feelback/js to v0.3.4
+
 ## 0.3.0 Major release
 - feat: custom email placeholder for message-based feelbacks
 - feat: can disable default message placeholder

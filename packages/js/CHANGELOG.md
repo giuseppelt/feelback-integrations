@@ -1,5 +1,9 @@
 # @feelback/js changelog
 
+## 0.3.4 Patch release
+- feat(browser): the "feelback-sent" event now carries the feedback
+- fix: fixed revokable and storage conditions on send
+
 ## 0.3.2 Patch release
 - feat(browser): dispatch custom events on send and revoke
 
