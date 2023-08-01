@@ -26,12 +26,12 @@ export async function sendFeelback(params: TargetContent & {
         ? { contentId: params.contentId }
         : { contentSetId: params.contentSetId, key: calculateContentKey(params.key) }
 
-    const storage = revokable && store && store !== "none" && getFeelbackStore(store) || undefined;
-    const revoke = storage?.getRevocable(target);
+    const storage = store && store !== "none" && getFeelbackStore(store) || undefined;
+    const revoke = revokable && storage?.getRevocable(target) || undefined;
 
     const result = revoke
         ? await http.post(`${endpoint}/feelbacks/edit`, { ...revoke, value })
-        : await http.post(`${endpoint}/feelbacks/create`, { ...target, value, context: metadata });
+        : await http.post(`${endpoint}/feelbacks/create`, { ...target, value, context: metadata, revokable });
 
     storage?.add({
         ...result as any,
