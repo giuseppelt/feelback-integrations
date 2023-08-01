@@ -6,6 +6,7 @@ import { FeelbackLayout, Form, FormHandlerProps } from "../parts";
 export type FeelbackMessageProps = Readonly<TargetContent & {
   layout?: "button-switch" | "button-dialog" | "inline"
   label?: string
+  revokable?: boolean
   textAnswer?: string
 }> & Pick<MessageFormProps,
   | "title"
@@ -21,6 +22,7 @@ export function FeelbackMessage(props: FeelbackMessageProps) {
   const {
     layout = "button-switch",
     label = "Send feedback",
+    revokable,
     title,
     placeholder,
     minLength,
@@ -34,7 +36,7 @@ export function FeelbackMessage(props: FeelbackMessageProps) {
 
 
   return (
-    <FeelbackLayout className={`feelback-message layout-${layout}`} {...{ layout, label, ...content }}>
+    <FeelbackLayout className={`feelback-message layout-${layout}`} {...{ layout, label, revokable, ...content }}>
       <MessageForm {...{ title, placeholder, minLength, maxLength, withEmail, placeholderEmail, slots }} />
     </FeelbackLayout>
   )

@@ -12,6 +12,7 @@ export type FeelbackLayoutProps<T> = Readonly<TargetContent & {
   layout?: "button-switch" | "button-dialog" | "inline" | "radio-group" | "radio-group-dialog" | "reveal-message"
   label?: string
   textAnswer?: string
+  revokable?: boolean
   onClose?: () => void
   onSuccess?: () => void
   children: ReactElement<FormHandlerProps<T>>
@@ -23,6 +24,7 @@ export const FeelbackLayout = forwardRef<HTMLDivElement, FeelbackLayoutProps<any
     layout,
     label = "Send feedback",
     textAnswer = "Thanks for your feedback",
+    revokable = true,
     onClose,
     onSuccess,
     children: Form,
@@ -35,7 +37,7 @@ export const FeelbackLayout = forwardRef<HTMLDivElement, FeelbackLayoutProps<any
 
   const onSubmit = ({ value, metadata }: FeelbackData) => {
     setDisabled(true);
-    call(value, metadata);
+    call(value, { metadata, revokable });
   }
 
   useEffect(() => {

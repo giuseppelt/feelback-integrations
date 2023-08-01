@@ -9,6 +9,7 @@ export type FeelbackTaggedMessageProps = Readonly<TargetContent & {
   layout?: "button-switch" | "button-dialog" | "inline" | "radio-group" | "radio-group-dialog" | "reveal-message"
   style?: OneOrMany<"bordered" | `width-${"sm" | "md"}` | `align-center`>
   label?: string
+  revokable?: boolean
   textAnswer?: string
   preset?: readonly FeelbackValueDefinition[]
   onSuccess?: () => void
@@ -30,6 +31,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
   const {
     layout = "button-switch",
     label = "Send feedback",
+    revokable,
     preset,
     tags = preset,
     active,
@@ -57,7 +59,7 @@ export function FeelbackTaggedMessage(props: FeelbackTaggedMessageProps) {
 
   return (
     <FeelbackLayout className={`feelback-tagged-message layout-${layout} ${style}`}
-      {...{ layout, label, onSuccess, ...content }}
+      {...{ layout, label, revokable, onSuccess, ...content }}
     >
       <TaggedMessageForm {...{ title, tags, showLabels, placeholder, minLength, maxLength, withEmail, placeholderEmail, onCancel, slots }}
         layout={layout === "reveal-message" ? layout : layout === "radio-group" || layout === "radio-group-dialog" ? "radio-group" : "form"}

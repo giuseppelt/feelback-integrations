@@ -6,6 +6,7 @@ import { ButtonValueList } from "../parts";
 
 export type FeelbackPulseProps = Readonly<TargetContent & {
   preset?: readonly FeelbackValueDefinition[]
+  revokable?: boolean
   showCount?: boolean
 }>
 
@@ -13,6 +14,7 @@ export function FeelbackPulse(props: FeelbackPulseProps) {
   const {
     showCount,
     preset,
+    revokable = true,
     ...content
   } = props;
 
@@ -31,7 +33,7 @@ export function FeelbackPulse(props: FeelbackPulseProps) {
       }
     } else {
       setDisabled(true);
-      send("+");
+      send("+", { revokable });
     }
   };
 

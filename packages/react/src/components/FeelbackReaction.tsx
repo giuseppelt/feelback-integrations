@@ -9,6 +9,7 @@ import IconHappy from "@feelback/js/icons/icon-happy.svg";
 export type FeelbackReactionProps = Readonly<TargetContent & {
   layout?: "list" | "picker"
   preset?: readonly FeelbackValueDefinition[]
+  revokable?: boolean
   showCount?: boolean
   textQuestion?: string
   textAnswer?: string
@@ -30,6 +31,7 @@ function PickerLayout(props: FeelbackReactionProps) {
   const {
     showCount = true,
     preset,
+    revokable = true,
     ...content
   } = props;
 
@@ -56,7 +58,7 @@ function PickerLayout(props: FeelbackReactionProps) {
       }
     } else {
       setDisabled(true);
-      send(value);
+      send(value, { revokable });
     }
   };
 

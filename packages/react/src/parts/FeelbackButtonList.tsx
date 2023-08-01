@@ -7,6 +7,7 @@ import { Answer, Question } from ".";
 export type FeelbackButtonListProps = Readonly<TargetContent & {
   className?: string
   preset?: readonly FeelbackValueDefinition[]
+  revokable?: boolean
   showCount?: boolean
   textQuestion?: string
   textAnswer?: string
@@ -19,6 +20,7 @@ export function FeelbackButtonList(props: FeelbackButtonListProps) {
     preset,
     textQuestion,
     textAnswer,
+    revokable = true,
     ...content
   } = props;
 
@@ -39,7 +41,7 @@ export function FeelbackButtonList(props: FeelbackButtonListProps) {
       }
     } else {
       setDisabled(true);
-      send(value);
+      send(value, { revokable });
     }
   };
 

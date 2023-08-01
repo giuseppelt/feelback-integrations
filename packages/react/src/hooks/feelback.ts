@@ -14,16 +14,19 @@ export function useFeelbackAggregates(content: TargetContent, options?: { paused
     }), [target], options);
 }
 
+
+type SendFeelbackOptions = Pick<Parameters<typeof sendFeelback>[0], "expireIn" | "store" | "revokable" | "metadata">
+
 export function useSendFeelback(content: TargetContent) {
     const context = useFeelbackContext();
     const target = useMemoTargetContent(content);
 
-    return useAsyncCall((value: any, metadata?: Record<string, string | number>) => sendFeelback({
+    return useAsyncCall((value: any, options?: SendFeelbackOptions) => sendFeelback({
         endpoint: context?.endpoint,
         store: context?.store,
+        ...options,
         ...target,
-        value,
-        metadata,
+        value
     }));
 }
 
