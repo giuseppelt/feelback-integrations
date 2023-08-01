@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, forwardRef, useRef, useState } from "react";
+import { ReactElement, forwardRef, useRef, useState } from "react";
 import { TargetContent } from "@feelback/js";
 import { ButtonValueList, FeelbackLayout, Form, FormHandlerProps, Question, RadioValueList } from "../parts";
 import { FeelbackValueDefinition } from "../types";
@@ -12,7 +12,7 @@ export type FeelbackTaggedMessageProps = Readonly<TargetContent & {
   revokable?: boolean
   textAnswer?: string
   preset?: readonly FeelbackValueDefinition[]
-  onSuccess?: () => void
+  onSuccess?: (feelback: TargetContent & { value: { tag?: string, message?: string } }) => void
 }> & Partial<Pick<TaggedMessageFormProps,
   | "title"
   | "tags"

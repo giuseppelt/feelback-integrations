@@ -14,7 +14,7 @@ export type FeelbackLayoutProps<T> = Readonly<TargetContent & {
   textAnswer?: string
   revokable?: boolean
   onClose?: () => void
-  onSuccess?: () => void
+  onSuccess?: (feelback: TargetContent & { value: T }) => void
   children: ReactElement<FormHandlerProps<T>>
 }>
 
@@ -37,15 +37,12 @@ export const FeelbackLayout = forwardRef<HTMLDivElement, FeelbackLayoutProps<any
 
   const onSubmit = ({ value, metadata }: FeelbackData) => {
     setDisabled(true);
-    call(value, { metadata, revokable });
+    call(value, { metadata, revokable }).then(({ isSuccess }) => {
+      if (isSuccess) {
+        onSuccess?.({ ...content, value });
+      }
+    });
   }
-
-  useEffect(() => {
-    if (isSuccess) {
-      onSuccess?.();
-    }
-  }, [isSuccess]);
-
 
   return (
     <div ref={ref} className={`feelback-container${className ? " " + className : ""}`} style={{ pointerEvents: isDisabled ? "none" : undefined }}>
