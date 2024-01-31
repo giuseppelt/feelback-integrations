@@ -1,33 +1,35 @@
-import { defineConfig } from "astro/config";
-import starlight from "@astrojs/starlight";
-import overrideComponentIntegration from "./src/overrideIntegration.mjs";
-
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [
-    overrideComponentIntegration(),
-    starlight({
-      title: "My Docs",
-      social: {
-        github: "https://github.com/withastro/starlight",
-      },
-      sidebar: [
-        {
-          label: "Guides",
-          items: [
-            // Each item here is one entry in the navigation menu.
-            { label: "Example Guide", link: "/guides/example/" },
-          ],
-        },
-        {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
-        },
-      ],
-    }),
-  ],
-
-  // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp
-  image: { service: { entrypoint: "astro/assets/services/sharp" } },
+	integrations: [
+		starlight({
+			title: 'My Docs',
+			social: {
+				github: 'https://github.com/withastro/starlight',
+			},
+			sidebar: [
+				{
+					label: 'Guides',
+					items: [
+						// Each item here is one entry in the navigation menu.
+						{ label: 'Example Guide', link: '/guides/example/' },
+					],
+				},
+				{
+					label: 'Reference',
+					autogenerate: { directory: 'reference' },
+				},
+			],
+			//
+			// FeelBack integration >
+			//
+			// Here is where you replace a builtin component with a custom one
+			// that embeds the feedback component
+			components: {
+				Pagination: "./src/components/CustomPagination.astro"
+			}
+		}),
+	],
 });
