@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "build": "pnpm run -r build",
-    "prerelease": "ts-node -T scripts/prerelease",
+    "prerelease": "tsx scripts/prerelease",
     "publish": "pnpm publish -r --access public",
     "publish:pre": "pnpm publish -r --access public --tag pre",
     "watch:ts": "tsc --build tsconfig.dev.json --watch --incremental --force"
   },
   "devDependencies": {
     "@types/node": "^18.17.1",
-    "ts-node": "^10.9.1",
+    "tsx": "^4.7.0",
     "typescript": "^5.1.6"
   }
 }
